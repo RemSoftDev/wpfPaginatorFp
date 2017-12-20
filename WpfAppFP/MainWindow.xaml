@@ -11,7 +11,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        
+
         <ListBox Grid.Row="0" Name="ListDB"></ListBox>
 
         <DockPanel Grid.Row="1" LastChildFill="True">
@@ -19,20 +19,36 @@
             <Button Content="&#32;&#32;&#60;&#32;&#32;"/>
             <Button Content="&lt;&lt;&lt;"/>
 
-            <Button Content="&#32;&#32;&#62;&#32;&#32;" DockPanel.Dock="Right"/>
-            <Button Content="&gt;&gt;&gt;" DockPanel.Dock="Right"/>
+            <Button Content="&#32;&#32;&#62;&#32;&#32;" 
+                    DockPanel.Dock="Right"/>
 
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
+            <Button Content="&gt;&gt;&gt;" 
+                    DockPanel.Dock="Right"/>
+
+            <StackPanel Orientation="Horizontal" 
+                        DockPanel.Dock="Top" 
+                        HorizontalAlignment="Center">
+
                 <TextBlock  Text="Pages to skip: "/>
-                <ComboBox Name="ComboBoxPagesToSkip"  HorizontalAlignment="Center"/>
+
+                <ComboBox Name="ComboBoxPagesToSkip"  
+                          HorizontalAlignment="Center"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" 
+                        DockPanel.Dock="Bottom" 
+                        HorizontalAlignment="Center">
+
                 <TextBlock  Text="Items per page: "/>
-                <ComboBox Name="ComboBoxItemsPerPage"  HorizontalAlignment="Center"/>
+
+                <ComboBox Name="ComboBoxItemsPerPage"  
+                          HorizontalAlignment="Center"/>
             </StackPanel>
-            
-            <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+
+            <StackPanel Margin="10" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center">
+
                 <TextBlock  Text="Current page is: "/>
                 <TextBox Width="30" Text="10" HorizontalAlignment="Center"/>
             </StackPanel>

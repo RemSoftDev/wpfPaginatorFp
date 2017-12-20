@@ -23,16 +23,16 @@ namespace WpfAppFP
         public MainWindow()
         {
             InitializeComponent();
-            Init();
+            InitPaginator();
+
+            var DB = MOCK_InitializeData();
+            ListDB.ItemsSource = DB.Take(10);
         }
 
-        void Init()
-        {
-            var DB = MOCK_InitializeData();
+        void InitPaginator()
+        {           
             var IiemsPerPage = MOCK_InitializeItemsPerPage();
-            var pagesToSkip = MOCK_InitializeItemsPerPage();
-
-            ListDB.ItemsSource = DB.Take(10);
+            var pagesToSkip = MOCK_InitializeItemsPerPage(); 
 
             ComboBoxItemsPerPage.ItemsSource = IiemsPerPage;
             ComboBoxItemsPerPage.SelectedIndex = 0;
