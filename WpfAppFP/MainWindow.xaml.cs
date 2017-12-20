@@ -59,6 +59,29 @@ namespace WpfAppFP
             return res;
         }
 
+        private void Button_Click_Left(object sender, RoutedEventArgs e)
+        {
 
+        }
+
+        private void Button_Click_LeftMore(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_Right(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_RightMore(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ComboBoxPagesToSkip_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
