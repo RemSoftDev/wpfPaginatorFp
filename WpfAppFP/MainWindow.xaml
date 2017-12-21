@@ -47,7 +47,8 @@
 
                 <TextBlock  Text="Items per page: "/>
 
-                <ComboBox Name="ComboBoxItemsPerPage"  
+                <ComboBox Name="ComboBoxItemsPerPage" 
+                          SelectionChanged="ComboBoxItemsPerPage_SelectionChanged"  
                           HorizontalAlignment="Center"/>
             </StackPanel>
 

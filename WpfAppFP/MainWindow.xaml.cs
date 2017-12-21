@@ -131,5 +131,10 @@ namespace WpfAppFP
         {
 
         }
+
+        private void ComboBoxItemsPerPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
