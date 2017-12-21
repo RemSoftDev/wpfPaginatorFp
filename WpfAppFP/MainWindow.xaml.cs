@@ -29,10 +29,11 @@ namespace WpfAppFP
             ListDB.ItemsSource = DB.Take(10);
         }
 
+        // Initialisations
         void InitPaginator()
-        {           
+        {
             var IiemsPerPage = MOCK_InitializeItemsPerPage();
-            var pagesToSkip = MOCK_InitializeItemsPerPage(); 
+            var pagesToSkip = MOCK_InitializeItemsPerPage();
 
             ComboBoxItemsPerPage.ItemsSource = IiemsPerPage;
             ComboBoxItemsPerPage.SelectedIndex = 0;
@@ -59,6 +60,53 @@ namespace WpfAppFP
             return res;
         }
 
+        // Validators
+        private bool IsValid()
+        {
+            IsValidLeft();
+            IsValidLeftMore();
+            IsValidRight();
+            IsValidRightMore();
+            IsValidItemsPerPage();
+            IsValidPagesToSkip();
+
+            return false;
+        }
+
+        private bool IsValidLeft()
+        {
+
+
+            return false;
+        }
+
+        private bool IsValidLeftMore()
+        {
+
+            return false;
+        }
+
+        private bool IsValidRight()
+        {
+            return false;
+        }
+
+        private bool IsValidRightMore()
+        {
+            return false;
+        }
+
+        private bool IsValidItemsPerPage()
+        {
+            return false;
+        }
+
+        private bool IsValidPagesToSkip()
+        {
+            return false;
+        }
+
+        // Handlers
         private void Button_Click_Left(object sender, RoutedEventArgs e)
         {
 
