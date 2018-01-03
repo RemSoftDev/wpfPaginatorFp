@@ -43,7 +43,10 @@ namespace WpfAppFP
         private IEnumerable<int> GetDataToShow()
         {
             var DB = MOCK_InitializeData();
-            var res = DB.Take(ItemsPerPage);
+
+            int startItem = (CurrentPage - 1) * ItemsPerPage;
+            int endItem = CurrentPage * ItemsPerPage;
+            var res = DB.Where(z => z > startItem && z <= endItem);
 
             TotalNumberOfItemsInDB = DB.Count();
 
@@ -90,7 +93,7 @@ namespace WpfAppFP
 
         void InitPaginator()
         {
-            CurrentPage = 97;
+            CurrentPage = 1;
 
             var itemsPerPage = MOCK_InitializeItemsPerPage();
             var pagesToSkip = MOCK_InitializeItemsPagesToSkip();
