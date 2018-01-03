@@ -25,21 +25,47 @@ namespace WpfAppFP
             InitializeComponent();
             InitPaginator();
 
+            SetDataToShow();
+        }
+
+        private int CurrentPage;
+        private int ItemsPerPage;
+        private int PagesToSkip;
+
+        private int TotalNumberOfItemsInDB;
+
+        private void SetDataToShow()
+        {
+            ListDB.ItemsSource = GetDataToShow();
+        }
+
+        private IEnumerable<int> GetDataToShow()
+        {
             var DB = MOCK_InitializeData();
-            ListDB.ItemsSource = DB.Take(10);
+            var res = DB.Take(ItemsPerPage);
+
+            TotalNumberOfItemsInDB = DB.Count();
+
+            return res;
         }
 
         // Initialisations
         void InitPaginator()
         {
-            var IiemsPerPage = MOCK_InitializeItemsPerPage();
-            var pagesToSkip = MOCK_InitializeItemsPerPage();
+            CurrentPage = 1;
 
-            ComboBoxItemsPerPage.ItemsSource = IiemsPerPage;
+            var itemsPerPage = MOCK_InitializeItemsPerPage();
+            var pagesToSkip = MOCK_InitializeItemsPagesToSkip();
+
+            ComboBoxItemsPerPage.ItemsSource = itemsPerPage;
             ComboBoxItemsPerPage.SelectedIndex = 0;
+            ItemsPerPage = itemsPerPage.First();
 
             ComboBoxPagesToSkip.ItemsSource = pagesToSkip;
             ComboBoxPagesToSkip.SelectedIndex = 0;
+            PagesToSkip = pagesToSkip.First();          
+
+            UpdateUI_CurrentPageIs();
         }
 
         private List<int> MOCK_InitializeData()
@@ -75,14 +101,11 @@ namespace WpfAppFP
 
         private bool IsValidLeft()
         {
-
-
             return false;
         }
 
         private bool IsValidLeftMore()
         {
-
             return false;
         }
 
@@ -135,6 +158,12 @@ namespace WpfAppFP
         private void ComboBoxItemsPerPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        // Update UI
+        private void UpdateUI_CurrentPageIs()
+        {
+            Name_CurrentPageIs.Text = CurrentPage.ToString();
         }
     }
 }

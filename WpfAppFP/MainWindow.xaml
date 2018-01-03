@@ -57,7 +57,7 @@
                         HorizontalAlignment="Center">
 
                 <TextBlock  Text="Current page is: "/>
-                <TextBox Width="30" Text="10" HorizontalAlignment="Center"/>
+                <TextBox Name="Name_CurrentPageIs" Width="30" Text="10" HorizontalAlignment="Center"/>
             </StackPanel>
         </DockPanel>
     </Grid>
