@@ -17,16 +17,20 @@
         <DockPanel Grid.Row="1" LastChildFill="True">
 
             <Button Content="&#32;&#32;&#60;&#32;&#32;"
+                    Name="Name_ButtonLeft"
                     Click="Button_Click_Left"/>
             
             <Button Content="&lt;&lt;&lt;"
+                    Name="Name_ButtonLeftMore"
                     Click="Button_Click_LeftMore" />
 
             <Button Content="&#32;&#32;&#62;&#32;&#32;" 
+                    Name="Name_ButtonRight"
                     Click="Button_Click_Right"
                     DockPanel.Dock="Right"/>
 
             <Button Content="&gt;&gt;&gt;" 
+                    Name="Name_ButtonRightMore"
                     Click="Button_Click_RightMore"
                     DockPanel.Dock="Right"/>
 

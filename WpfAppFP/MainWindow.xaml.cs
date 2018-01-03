@@ -26,6 +26,7 @@ namespace WpfAppFP
             InitPaginator();
 
             SetDataToShow();
+            DisableElements();
         }
 
         private int CurrentPage;
@@ -50,9 +51,46 @@ namespace WpfAppFP
         }
 
         // Initialisations
+
+        private void DisableElements()
+        {
+            DisableLeft();
+            DisableLeftMore();
+            DisableRight();
+            DisableRightMore();
+        }
+
+        private void DisableLeft()
+        {
+            var res = IsValidLeft();
+
+            Name_ButtonLeft.IsEnabled = res;
+        }
+
+        private void DisableLeftMore()
+        {
+            var res = IsValidLeftMore();
+
+            Name_ButtonLeftMore.IsEnabled = res;
+        }
+
+        private void DisableRight()
+        {
+            var res = IsValidRight();
+
+            Name_ButtonRight.IsEnabled = res;
+        }
+
+        private void DisableRightMore()
+        {
+            var res = IsValidRightMore();
+
+            Name_ButtonRightMore.IsEnabled = res;
+        }
+
         void InitPaginator()
         {
-            CurrentPage = 1;
+            CurrentPage = 97;
 
             var itemsPerPage = MOCK_InitializeItemsPerPage();
             var pagesToSkip = MOCK_InitializeItemsPagesToSkip();
@@ -63,7 +101,7 @@ namespace WpfAppFP
 
             ComboBoxPagesToSkip.ItemsSource = pagesToSkip;
             ComboBoxPagesToSkip.SelectedIndex = 0;
-            PagesToSkip = pagesToSkip.First();          
+            PagesToSkip = pagesToSkip.First();
 
             UpdateUI_CurrentPageIs();
         }
@@ -101,32 +139,74 @@ namespace WpfAppFP
 
         private bool IsValidLeft()
         {
-            return false;
+            var res = false;
+
+            if (CurrentPage > 1)
+            {
+                res = true;
+            }
+
+            return res;
         }
 
         private bool IsValidLeftMore()
         {
-            return false;
+            var res = false;
+
+            if (CurrentPage - PagesToSkip > 1)
+            {
+                res = true;
+            }
+
+            return res;
         }
 
         private bool IsValidRight()
         {
-            return false;
+            var res = false;
+
+            if (CurrentPage < TotalNumberOfItemsInDB)
+            {
+                res = true;
+            }
+
+            return res;
         }
 
         private bool IsValidRightMore()
         {
-            return false;
+            var res = false;
+
+            if (CurrentPage + PagesToSkip < TotalNumberOfItemsInDB)
+            {
+                res = true;
+            }
+
+            return res;
         }
 
         private bool IsValidItemsPerPage()
         {
-            return false;
+            var res = false;
+
+            //if (CurrentPage > 1)
+            //{
+            //    res = true;
+            //}
+
+            return res;
         }
 
         private bool IsValidPagesToSkip()
         {
-            return false;
+            var res = false;
+
+            //if (CurrentPage > 1)
+            //{
+            //    res = true;
+            //}
+
+            return res;
         }
 
         // Handlers
