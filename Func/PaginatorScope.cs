@@ -8,6 +8,6 @@ namespace Func
 {
     public class PaginatorScope
     {
-
+	//added changes
     }
 }
