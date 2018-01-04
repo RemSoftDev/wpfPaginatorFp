@@ -33,8 +33,8 @@ namespace WpfAppFP
         private int CurrentPage;
         private int ItemsPerPage;
         private int PagesToSkip;
-
         private int TotalNumberOfItemsInDB;
+        private int NumberOfPages;
 
         private void SetDataToShow()
         {
