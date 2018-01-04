@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Func;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,9 +45,15 @@ namespace WpfAppFP
         {
             var DB = MOCK_InitializeData();
 
-            int startItem = (CurrentPage - 1) * ItemsPerPage;
-            int endItem = CurrentPage * ItemsPerPage;
-            var res = DB.Where(z => z > startItem && z <= endItem);
+            var res = PaginatorScope.GetItemsToShow(
+                PaginatorScope.GetStartIndex(),
+                PaginatorScope.GetEndIndex(),
+                PaginatorScope.GetDataStartEndIndex())
+                    (CurrentPage, ItemsPerPage, DB);
+
+            //int startItem = (CurrentPage - 1) * ItemsPerPage;
+            //int endItem = CurrentPage * ItemsPerPage;
+            //var res = DB.Where(z => z > startItem && z <= endItem);
 
             TotalNumberOfItemsInDB = DB.Count();
 
