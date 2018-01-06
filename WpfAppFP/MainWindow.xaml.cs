@@ -46,10 +46,10 @@ namespace WpfAppFP
             var DB = MOCK_InitializeData();
 
             var res = PaginatorScope.GetItemsToShow(
-                PaginatorScope.GetStartIndex(),
-                PaginatorScope.GetEndIndex(),
-                PaginatorScope.GetDataStartEndIndex())
-                    (CurrentPage, ItemsPerPage, DB);
+                        PaginatorScope.GetStartIndex(),
+                        PaginatorScope.GetEndIndex(),
+                        PaginatorScope.GetDataStartEndIndex())
+                        (CurrentPage, ItemsPerPage, DB);
 
             //int startItem = (CurrentPage - 1) * ItemsPerPage;
             //int endItem = CurrentPage * ItemsPerPage;
@@ -175,7 +175,7 @@ namespace WpfAppFP
         {
             var res = false;
 
-            if (CurrentPage < TotalNumberOfItemsInDB)
+            if (CurrentPage < NumberOfPages)
             {
                 res = true;
             }
@@ -187,7 +187,7 @@ namespace WpfAppFP
         {
             var res = false;
 
-            if (CurrentPage + PagesToSkip < TotalNumberOfItemsInDB)
+            if (CurrentPage + PagesToSkip < NumberOfPages)
             {
                 res = true;
             }
