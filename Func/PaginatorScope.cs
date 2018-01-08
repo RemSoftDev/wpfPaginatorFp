@@ -8,7 +8,38 @@ namespace Func
 {
     public static class PaginatorScope
     {
-        public static Func<int, int, IEnumerable<int>, IEnumerable<int>> GetItemsToShow(
+        public static Func<int, int, int, IEnumerable<int>,
+            (IEnumerable<int> itemsToShow,
+            int currentPage,
+            int NumberOfPages,
+            bool IsValidLeft,
+            bool IsValidLeftMore,
+            bool IsValidRight,
+            bool IsValidRightMore
+            )>
+            PageRight()
+        {
+            return (currentPage, itemsPerPage, pagesToSkip, DbData) =>
+            {
+                var totalNumberOfItemsInDB = GetTotalNumberOfItemsInDB()(DbData);
+                var numberOfPages = GetNumberOfPages()(totalNumberOfItemsInDB, itemsPerPage);
+
+                var isValidLeft = IsValidLeft()(currentPage);
+                var isValidLeftMore = IsValidLeftMore()(currentPage, pagesToSkip);
+                var isValidRight = IsValidRight()(currentPage, numberOfPages);
+                var isValidRightMore = IsValidRightMore()(currentPage, pagesToSkip, numberOfPages);
+
+                var itemsToShow = GetItemsToShow(
+                    GetStartIndex(),
+                    GetEndIndex(),
+                    GetDataStartEndIndex())
+                    (currentPage, itemsPerPage, DbData);
+
+                return (itemsToShow, currentPage, numberOfPages, isValidLeft, isValidLeftMore, isValidRight, isValidRightMore);
+            };
+        }
+
+        private static Func<int, int, IEnumerable<int>, IEnumerable<int>> GetItemsToShow(
             Func<int, int, int> getStartIndex,
             Func<int, int, int> getEndIndex,
             Func<int, int, IEnumerable<int>, IEnumerable<int>> GetDataStartEndIndex
@@ -23,7 +54,7 @@ namespace Func
             };
         }
 
-        public static Func<int, int, int> GetStartIndex()
+        private static Func<int, int, int> GetStartIndex()
         {
             return (CurrentPage, ItemsPerPage) =>
             {
@@ -31,7 +62,7 @@ namespace Func
             };
         }
 
-        public static Func<int, int, int> GetEndIndex()
+        private static Func<int, int, int> GetEndIndex()
         {
             return (CurrentPage, ItemsPerPage) =>
             {
@@ -39,11 +70,88 @@ namespace Func
             };
         }
 
-        public static Func<int, int, IEnumerable<int>, IEnumerable<int>> GetDataStartEndIndex()
+        private static Func<int, int, IEnumerable<int>, IEnumerable<int>> GetDataStartEndIndex()
         {
             return (startIndex, endIndex, DbData) =>
             {
                 return DbData.Where(z => z > startIndex && z <= endIndex);
+            };
+        }
+
+        private static Func<IEnumerable<int>, int> GetTotalNumberOfItemsInDB()
+        {
+            return (DbData) =>
+            {
+                return DbData.Count();
+            };
+        }
+
+        private static Func<int, int, int> GetNumberOfPages()
+        {
+            return (TotalNumberOfItemsInDB, ItemsPerPage) =>
+            {
+                var res = (int)Math.Round((double)TotalNumberOfItemsInDB / ItemsPerPage, 0, MidpointRounding.AwayFromZero);
+                return res;
+            };
+        }
+
+        private static Func<int, bool> IsValidLeft()
+        {
+            return (CurrentPage) =>
+            {
+                var res = false;
+
+                if (CurrentPage > 1)
+                {
+                    res = true;
+                }
+
+                return res;
+            };
+        }
+
+        private static Func<int, int, bool> IsValidLeftMore()
+        {
+            return (CurrentPage, PagesToSkip) =>
+            {
+                var res = false;
+
+                if (CurrentPage - PagesToSkip > 1)
+                {
+                    res = true;
+                }
+
+                return res;
+            };
+        }
+
+        private static Func<int, int, bool> IsValidRight()
+        {
+            return (CurrentPage, NumberOfPages) =>
+            {
+                var res = false;
+
+                if (CurrentPage < NumberOfPages)
+                {
+                    res = true;
+                }
+
+                return res;
+            };
+        }
+
+        private static Func<int, int, int, bool> IsValidRightMore()
+        {
+            return (CurrentPage, PagesToSkip, NumberOfPages) =>
+            {
+                var res = false;
+
+                if (CurrentPage + PagesToSkip < NumberOfPages)
+                {
+                    res = true;
+                }
+
+                return res;
             };
         }
     }

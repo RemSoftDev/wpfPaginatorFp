@@ -30,38 +30,23 @@ namespace WpfAppFP
             DisableElements();
         }
 
-        private int CurrentPage;
-        private int ItemsPerPage;
-        private int PagesToSkip;
-        private int TotalNumberOfItemsInDB;
-        private int NumberOfPages;
+        private (
+             IEnumerable<int> itemsToShow,
+             int CurrentPage,
+             int NumberOfPages,
+             bool IsValidLeft,
+             bool IsValidLeftMore,
+             bool IsValidRight,
+             bool IsValidRightMore
+             )
+             PageRight;
 
         private void SetDataToShow()
         {
-            ListDB.ItemsSource = GetDataToShow();
-        }
-
-        private IEnumerable<int> GetDataToShow()
-        {
-            var DB = MOCK_InitializeData();
-
-            var res = PaginatorScope.GetItemsToShow(
-                        PaginatorScope.GetStartIndex(),
-                        PaginatorScope.GetEndIndex(),
-                        PaginatorScope.GetDataStartEndIndex())
-                        (CurrentPage, ItemsPerPage, DB);
-
-            //int startItem = (CurrentPage - 1) * ItemsPerPage;
-            //int endItem = CurrentPage * ItemsPerPage;
-            //var res = DB.Where(z => z > startItem && z <= endItem);
-
-            TotalNumberOfItemsInDB = DB.Count();
-
-            return res;
+            ListDB.ItemsSource = PageRight.itemsToShow;
         }
 
         // Initialisations
-
         private void DisableElements()
         {
             DisableLeft();
@@ -72,46 +57,42 @@ namespace WpfAppFP
 
         private void DisableLeft()
         {
-            var res = IsValidLeft();
-
-            Name_ButtonLeft.IsEnabled = res;
+            Name_ButtonLeft.IsEnabled = PageRight.IsValidLeft;
         }
 
         private void DisableLeftMore()
         {
-            var res = IsValidLeftMore();
-
-            Name_ButtonLeftMore.IsEnabled = res;
+            Name_ButtonLeftMore.IsEnabled = PageRight.IsValidLeftMore;
         }
 
         private void DisableRight()
         {
-            var res = IsValidRight();
-
-            Name_ButtonRight.IsEnabled = res;
+            Name_ButtonRight.IsEnabled = PageRight.IsValidRight;
         }
 
         private void DisableRightMore()
         {
-            var res = IsValidRightMore();
-
-            Name_ButtonRightMore.IsEnabled = res;
+            Name_ButtonRightMore.IsEnabled = PageRight.IsValidRightMore;
         }
 
         void InitPaginator()
         {
-            CurrentPage = 1;
+            var db = MOCK_InitializeData();
 
-            var itemsPerPage = MOCK_InitializeItemsPerPage();
-            var pagesToSkip = MOCK_InitializeItemsPagesToSkip();
+            var currentPage = 1;
 
-            ComboBoxItemsPerPage.ItemsSource = itemsPerPage;
+            var itemsPerPageList = MOCK_InitializeItemsPerPage();
+            var pagesToSkipList = MOCK_InitializeItemsPagesToSkip();
+
+            ComboBoxItemsPerPage.ItemsSource = itemsPerPageList;
             ComboBoxItemsPerPage.SelectedIndex = 0;
-            ItemsPerPage = itemsPerPage.First();
+            var itemsPerPage = itemsPerPageList.First();
 
-            ComboBoxPagesToSkip.ItemsSource = pagesToSkip;
+            ComboBoxPagesToSkip.ItemsSource = pagesToSkipList;
             ComboBoxPagesToSkip.SelectedIndex = 0;
-            PagesToSkip = pagesToSkip.First();
+            var pagesToSkip = pagesToSkipList.First();
+
+            PageRight = PaginatorScope.PageRight()(currentPage, itemsPerPage, pagesToSkip, db);
 
             UpdateUI_CurrentPageIs();
         }
@@ -137,63 +118,14 @@ namespace WpfAppFP
         // Validators
         private bool IsValid()
         {
-            IsValidLeft();
-            IsValidLeftMore();
-            IsValidRight();
-            IsValidRightMore();
+
             IsValidItemsPerPage();
             IsValidPagesToSkip();
 
             return false;
         }
 
-        private bool IsValidLeft()
-        {
-            var res = false;
 
-            if (CurrentPage > 1)
-            {
-                res = true;
-            }
-
-            return res;
-        }
-
-        private bool IsValidLeftMore()
-        {
-            var res = false;
-
-            if (CurrentPage - PagesToSkip > 1)
-            {
-                res = true;
-            }
-
-            return res;
-        }
-
-        private bool IsValidRight()
-        {
-            var res = false;
-
-            if (CurrentPage < NumberOfPages)
-            {
-                res = true;
-            }
-
-            return res;
-        }
-
-        private bool IsValidRightMore()
-        {
-            var res = false;
-
-            if (CurrentPage + PagesToSkip < NumberOfPages)
-            {
-                res = true;
-            }
-
-            return res;
-        }
 
         private bool IsValidItemsPerPage()
         {
@@ -253,7 +185,7 @@ namespace WpfAppFP
         // Update UI
         private void UpdateUI_CurrentPageIs()
         {
-            Name_CurrentPageIs.Text = CurrentPage.ToString();
+            Name_CurrentPageIs.Text = PageRight.CurrentPage.ToString();
         }
     }
 }
