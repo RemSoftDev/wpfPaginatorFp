@@ -14,10 +14,10 @@ namespace Func
             int ItemsPerPage,
             int PagesToSkip,
             IEnumerable<int> DbData,
-            IEnumerable<int> PagesRight,
-            IEnumerable<int> PagesRightMore,
-            IEnumerable<int> PagesLeft,
-            IEnumerable<int> PagesLeftMore,
+            Func<IEnumerable<int>> PagesRight,
+            Func<IEnumerable<int>> PagesRightMore,
+            Func<IEnumerable<int>> PagesLeft,
+            Func<IEnumerable<int>> PagesLeftMore,
             int NumberOfPages,
             bool IsValidLeft,
             bool IsValidLeftMore,
@@ -36,11 +36,11 @@ namespace Func
                 var isValidRight = IsValidRight()(currentPage, numberOfPages);
                 var isValidRightMore = IsValidRightMore()(currentPage, pagesToSkip, numberOfPages);
 
-                var pagesRight = PagesRight()(currentPage, itemsPerPage, DbData);
-                var pagesRightMore = PagesRight()(currentPage, itemsPerPage, DbData);
+                var pagesRight = PagesRight(currentPage, itemsPerPage, DbData);
+                var pagesRightMore = PagesRight(currentPage, itemsPerPage, DbData);
 
-                var pagesLeft = PagesLeft()(currentPage, itemsPerPage, DbData);
-                var pagesLeftMore = PagesRight()(currentPage, itemsPerPage, DbData);
+                var pagesLeft = PagesLeft(currentPage, itemsPerPage, DbData);
+                var pagesLeftMore = PagesRight(currentPage, itemsPerPage, DbData);
 
                 return (
                     currentPage,
@@ -59,6 +59,55 @@ namespace Func
             };
         }
 
+        public static TRes PipeForward<TArg, TRes>(
+           this TArg arg,
+           Func<TArg, TRes> func)
+        {
+            return func(arg);
+        }
+
+        public static (int, int, int, IEnumerable<int>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, int, bool, bool, bool, bool)
+            GoRight<TRes>(
+            this (
+                int CurrentPage,
+                int ItemsPerPage,
+                int PagesToSkip,
+                IEnumerable<int> DbData,
+                Func<IEnumerable<int>> PagesRight,
+                Func<IEnumerable<int>> PagesRightMore,
+                Func<IEnumerable<int>> PagesLeft,
+                Func<IEnumerable<int>> PagesLeftMore,
+                int NumberOfPages,
+                bool IsValidLeft,
+                bool IsValidLeftMore,
+                bool IsValidRight,
+                bool IsValidRightMore
+                ) arg)
+        {
+            return Init()(++arg.CurrentPage, arg.ItemsPerPage, arg.PagesToSkip, arg.DbData);
+        }
+
+        public static (int, int, int, IEnumerable<int>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, int, bool, bool, bool, bool)
+            GoLeft<TRes>(
+            this (
+                int CurrentPage,
+                int ItemsPerPage,
+                int PagesToSkip,
+                IEnumerable<int> DbData,
+                Func<IEnumerable<int>> PagesRight,
+                Func<IEnumerable<int>> PagesRightMore,
+                Func<IEnumerable<int>> PagesLeft,
+                Func<IEnumerable<int>> PagesLeftMore,
+                int NumberOfPages,
+                bool IsValidLeft,
+                bool IsValidLeftMore,
+                bool IsValidRight,
+                bool IsValidRightMore
+                ) arg)
+        {
+            return Init()(--arg.CurrentPage, arg.ItemsPerPage, arg.PagesToSkip, arg.DbData);
+        }
+
         public static Func<int, int, IEnumerable<int>, IEnumerable<int>>
             GetPages()
         {
@@ -70,27 +119,24 @@ namespace Func
             return itemsToShowFunc;
         }
 
-        public static Func<int, int, IEnumerable<int>, IEnumerable<int>>
-            PagesRight()
+        public static Func<IEnumerable<int>>
+            PagesRight(
+            int CurrentPage, int ItemsPerPage, IEnumerable<int> DbData)
         {
-            return (CurrentPage, ItemsPerPage, DbData) =>
+            return () =>
             {
-                var itemsToShow = GetPages()
-                 (CurrentPage, ItemsPerPage, DbData);
-
-                return itemsToShow;
+                return GetPages()(CurrentPage, ItemsPerPage, DbData);
             };
         }
 
-        public static Func<int, int, IEnumerable<int>, IEnumerable<int>>
-            PagesLeft()
+        public static Func<IEnumerable<int>>
+            PagesLeft(
+           Func CurrentPage(), int ItemsPerPage, IEnumerable<int> DbData
+            )
         {
-            return (CurrentPage, ItemsPerPage, DbData) =>
+            return () =>
             {
-                var itemsToShow = GetPages()
-                 (CurrentPage - 1, ItemsPerPage, DbData);
-
-                return itemsToShow;
+                return GetPages()(CurrentPage(), ItemsPerPage, DbData);
             };
         }
 
@@ -103,8 +149,8 @@ namespace Func
         {
             return (currentPage, itemsPerPage, DbData) =>
             {
-                // how to handle the error (currentPage < 1) ???
-                var startIndex = getStartIndex(currentPage, itemsPerPage);
+                // how to handle the error (currentPage < 1) ???  //some Options !!!
+                var startIndex = getStartIndex(currentPage, itemsPerPage); //Cary... PipeTo
                 var endIndex = getEndIndex(currentPage, itemsPerPage);
 
                 return GetDataStartEndIndex(startIndex, endIndex, DbData);
@@ -190,20 +236,8 @@ namespace Func
         }
 
         private static Func<int, int, bool>
-            IsValidRight()
-        {
-            return (CurrentPage, NumberOfPages) =>
-            {
-                var res = false;
+            IsValidRight() => (CurrentPage, NumberOfPages) => CurrentPage < NumberOfPages;
 
-                if (CurrentPage < NumberOfPages)
-                {
-                    res = true;
-                }
-
-                return res;
-            };
-        }
 
         private static Func<int, int, int, bool>
             IsValidRightMore()

@@ -24,10 +24,10 @@ namespace WpfAppFP
         public MainWindow()
         {
             InitializeComponent();
-            InitPaginator();
+            InitPaginator();           
 
-            SetDataToShow();
-            DisableElements();
+            UpdateUI_SetDataToShow(Paginator.PagesRight());
+            UpdateUI();
         }
 
         private (
@@ -35,10 +35,10 @@ namespace WpfAppFP
             int ItemsPerPage,
             int PagesToSkip,
             IEnumerable<int> DbData,
-            IEnumerable<int> PagesRight,
-            IEnumerable<int> PagesRightMore,
-            IEnumerable<int> PagesLeft,
-            IEnumerable<int> PagesLeftMore,
+            Func<IEnumerable<int>> PagesRight,
+            Func<IEnumerable<int>> PagesRightMore,
+            Func<IEnumerable<int>> PagesLeft,
+            Func<IEnumerable<int>> PagesLeftMore,
             int NumberOfPages,
             bool IsValidLeft,
             bool IsValidLeftMore,
@@ -46,11 +46,6 @@ namespace WpfAppFP
             bool IsValidRightMore
             )
              Paginator;
-
-        private void SetDataToShow()
-        {
-            ListDB.ItemsSource = Paginator.PagesRight;
-        }
 
         // Initialisations
         private void DisableElements()
@@ -102,8 +97,6 @@ namespace WpfAppFP
 
             var zxcLeft = Paginator.PagesLeft;
             var zxcRight = Paginator.PagesRight;
-
-            UpdateUI_CurrentPageIs();
         }
 
         private List<int> MOCK_InitializeData()
@@ -133,22 +126,42 @@ namespace WpfAppFP
         // Handlers
         private void Button_Click_Left(object sender, RoutedEventArgs e)
         {
+            if (Paginator.IsValidLeft)
+            {
+                Paginator = Paginator.GoLeft<(int, int, int, IEnumerable<int>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, int, bool, bool, bool, bool)>();
 
+                UpdateUI_SetDataToShow(Paginator.PagesLeft());
+
+                UpdateUI();
+            }
         }
 
         private void Button_Click_LeftMore(object sender, RoutedEventArgs e)
         {
+            if (Paginator.IsValidLeftMore)
+            {
 
+            }
         }
 
         private void Button_Click_Right(object sender, RoutedEventArgs e)
         {
+            if (Paginator.IsValidRight)
+            {
+                Paginator = Paginator.GoRight<(int, int, int, IEnumerable<int>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, int, bool, bool, bool, bool)>();
 
+                UpdateUI_SetDataToShow(Paginator.PagesRight());
+
+                UpdateUI();
+            }
         }
 
         private void Button_Click_RightMore(object sender, RoutedEventArgs e)
         {
+            if (Paginator.IsValidRightMore)
+            {
 
+            }
         }
 
         private void ComboBoxPagesToSkip_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -162,9 +175,21 @@ namespace WpfAppFP
         }
 
         // Update UI
+        private void UpdateUI()
+        {
+            DisableElements();
+            UpdateUI_CurrentPageIs();
+
+        }
+
         private void UpdateUI_CurrentPageIs()
         {
             Name_CurrentPageIs.Text = Paginator.CurrentPage.ToString();
+        }
+
+        private void UpdateUI_SetDataToShow(IEnumerable<int> data)
+        {
+            ListDB.ItemsSource = data;
         }
     }
 }
