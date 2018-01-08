@@ -14,6 +14,10 @@ namespace Func
             int ItemsPerPage,
             int PagesToSkip,
             IEnumerable<int> DbData,
+            IEnumerable<int> PagesRight,
+            IEnumerable<int> PagesRightMore,
+            IEnumerable<int> PagesLeft,
+            IEnumerable<int> PagesLeftMore,
             int NumberOfPages,
             bool IsValidLeft,
             bool IsValidLeftMore,
@@ -32,60 +36,66 @@ namespace Func
                 var isValidRight = IsValidRight()(currentPage, numberOfPages);
                 var isValidRightMore = IsValidRightMore()(currentPage, pagesToSkip, numberOfPages);
 
-                return (currentPage, itemsPerPage, pagesToSkip, DbData, numberOfPages, isValidLeft, isValidLeftMore, isValidRight, isValidRightMore);
+                var pagesRight = PagesRight()(currentPage, itemsPerPage, DbData);
+                var pagesRightMore = PagesRight()(currentPage, itemsPerPage, DbData);
+
+                var pagesLeft = PagesLeft()(currentPage, itemsPerPage, DbData);
+                var pagesLeftMore = PagesRight()(currentPage, itemsPerPage, DbData);
+
+                return (
+                    currentPage,
+                    itemsPerPage,
+                    pagesToSkip,
+                    DbData,
+                    pagesRight,
+                    pagesRightMore,
+                    pagesLeft,
+                    pagesLeftMore,
+                    numberOfPages,
+                    isValidLeft,
+                    isValidLeftMore,
+                    isValidRight,
+                    isValidRightMore);
             };
         }
 
-        public static IEnumerable<int>
-            PageRight<TRes>
-            (this
-                (int CurrentPage,
-                 int ItemsPerPage,
-                 int PagesToSkip,
-                 IEnumerable<int> DbData,
-                 int NumberOfPages,
-                 bool IsValidLeft,
-                 bool IsValidLeftMore,
-                 bool IsValidRight,
-                 bool IsValidRightMore) tuple
-            )
+        public static Func<int, int, IEnumerable<int>, IEnumerable<int>>
+            GetPages()
         {
-                var itemsToShow = GetItemsToShow(
-                     GetLeftIndex(),
-                     GetRightIndex(),
-                     GetDataStartEndIndex())
-                     (tuple.CurrentPage, tuple.ItemsPerPage, tuple.DbData);
+            var itemsToShowFunc = GetItemsToShow(
+                 GetLeftIndex(),
+                 GetRightIndex(),
+                 GetDataStartEndIndex());
 
-                return (itemsToShow);
+            return itemsToShowFunc;
         }
 
-        public static Func<IEnumerable<int>>
-            PageLeft<TRes>
-            (this
-                (int CurrentPage,
-                 int ItemsPerPage,
-                 int PagesToSkip,
-                 IEnumerable<int> DbData,
-                 int NumberOfPages,
-                 bool IsValidLeft,
-                 bool IsValidLeftMore,
-                 bool IsValidRight,
-                 bool IsValidRightMore) tuple
-            )
+        public static Func<int, int, IEnumerable<int>, IEnumerable<int>>
+            PagesRight()
         {
-            return () =>
+            return (CurrentPage, ItemsPerPage, DbData) =>
             {
-                var itemsToShow = GetItemsToShow(
-                     GetLeftIndex(),
-                     GetRightIndex(),                    
-                     GetDataStartEndIndex())
-                     (tuple.CurrentPage-1, tuple.ItemsPerPage, tuple.DbData);
+                var itemsToShow = GetPages()
+                 (CurrentPage, ItemsPerPage, DbData);
 
-                return (itemsToShow);
+                return itemsToShow;
             };
         }
 
-        private static Func<int, int, IEnumerable<int>, IEnumerable<int>> GetItemsToShow(
+        public static Func<int, int, IEnumerable<int>, IEnumerable<int>>
+            PagesLeft()
+        {
+            return (CurrentPage, ItemsPerPage, DbData) =>
+            {
+                var itemsToShow = GetPages()
+                 (CurrentPage - 1, ItemsPerPage, DbData);
+
+                return itemsToShow;
+            };
+        }
+
+        private static Func<int, int, IEnumerable<int>, IEnumerable<int>>
+            GetItemsToShow(
             Func<int, int, int> getStartIndex,
             Func<int, int, int> getEndIndex,
             Func<int, int, IEnumerable<int>, IEnumerable<int>> GetDataStartEndIndex
@@ -93,6 +103,7 @@ namespace Func
         {
             return (currentPage, itemsPerPage, DbData) =>
             {
+                // how to handle the error (currentPage < 1) ???
                 var startIndex = getStartIndex(currentPage, itemsPerPage);
                 var endIndex = getEndIndex(currentPage, itemsPerPage);
 
@@ -100,7 +111,8 @@ namespace Func
             };
         }
 
-        private static Func<int, int, int> GetLeftIndex()
+        private static Func<int, int, int>
+            GetLeftIndex()
         {
             return (CurrentPage, ItemsPerPage) =>
             {
@@ -108,7 +120,8 @@ namespace Func
             };
         }
 
-        private static Func<int, int, int> GetRightIndex()
+        private static Func<int, int, int>
+            GetRightIndex()
         {
             return (CurrentPage, ItemsPerPage) =>
             {
@@ -116,7 +129,8 @@ namespace Func
             };
         }
 
-        private static Func<int, int, IEnumerable<int>, IEnumerable<int>> GetDataStartEndIndex()
+        private static Func<int, int, IEnumerable<int>, IEnumerable<int>>
+            GetDataStartEndIndex()
         {
             return (startIndex, endIndex, DbData) =>
             {
@@ -124,7 +138,8 @@ namespace Func
             };
         }
 
-        private static Func<IEnumerable<int>, int> GetTotalNumberOfItemsInDB()
+        private static Func<IEnumerable<int>, int>
+            GetTotalNumberOfItemsInDB()
         {
             return (DbData) =>
             {
@@ -132,7 +147,8 @@ namespace Func
             };
         }
 
-        private static Func<int, int, int> GetNumberOfPages()
+        private static Func<int, int, int>
+            GetNumberOfPages()
         {
             return (TotalNumberOfItemsInDB, ItemsPerPage) =>
             {
@@ -141,7 +157,8 @@ namespace Func
             };
         }
 
-        private static Func<int, bool> IsValidLeft()
+        private static Func<int, bool>
+            IsValidLeft()
         {
             return (CurrentPage) =>
             {
@@ -156,7 +173,8 @@ namespace Func
             };
         }
 
-        private static Func<int, int, bool> IsValidLeftMore()
+        private static Func<int, int, bool>
+            IsValidLeftMore()
         {
             return (CurrentPage, PagesToSkip) =>
             {
@@ -171,7 +189,8 @@ namespace Func
             };
         }
 
-        private static Func<int, int, bool> IsValidRight()
+        private static Func<int, int, bool>
+            IsValidRight()
         {
             return (CurrentPage, NumberOfPages) =>
             {
@@ -186,7 +205,8 @@ namespace Func
             };
         }
 
-        private static Func<int, int, int, bool> IsValidRightMore()
+        private static Func<int, int, int, bool>
+            IsValidRightMore()
         {
             return (CurrentPage, PagesToSkip, NumberOfPages) =>
             {
@@ -196,6 +216,38 @@ namespace Func
                 {
                     res = true;
                 }
+
+                return res;
+            };
+        }
+
+        private static Func<int, int, int, bool>
+            IsValidItemsPerPage()
+        {
+            return (CurrentPage, PagesToSkip, NumberOfPages) =>
+            {
+                var res = false;
+
+                //if (CurrentPage + PagesToSkip < NumberOfPages)
+                //{
+                //    res = true;
+                //}
+
+                return res;
+            };
+        }
+
+        private static Func<int, int, int, bool>
+            IsValidPagesToSkip()
+        {
+            return (CurrentPage, PagesToSkip, NumberOfPages) =>
+            {
+                var res = false;
+
+                //if (CurrentPage + PagesToSkip < NumberOfPages)
+                //{
+                //    res = true;
+                //}
 
                 return res;
             };

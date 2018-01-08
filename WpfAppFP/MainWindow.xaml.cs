@@ -35,6 +35,10 @@ namespace WpfAppFP
             int ItemsPerPage,
             int PagesToSkip,
             IEnumerable<int> DbData,
+            IEnumerable<int> PagesRight,
+            IEnumerable<int> PagesRightMore,
+            IEnumerable<int> PagesLeft,
+            IEnumerable<int> PagesLeftMore,
             int NumberOfPages,
             bool IsValidLeft,
             bool IsValidLeftMore,
@@ -45,7 +49,7 @@ namespace WpfAppFP
 
         private void SetDataToShow()
         {
-            ListDB.ItemsSource = Paginator.PageRight<IEnumerable<int>>();
+            ListDB.ItemsSource = Paginator.PagesRight;
         }
 
         // Initialisations
@@ -81,7 +85,7 @@ namespace WpfAppFP
         {
             var db = MOCK_InitializeData();
 
-            var currentPage = 2;
+            var currentPage = 1;
 
             var itemsPerPageList = MOCK_InitializeItemsPerPage();
             var pagesToSkipList = MOCK_InitializeItemsPagesToSkip();
@@ -96,8 +100,8 @@ namespace WpfAppFP
 
             Paginator = PaginatorScope.Init()(currentPage, itemsPerPage, pagesToSkip, db);
 
-            var zxcLeft = Paginator.PageLeft<IEnumerable<int>>()();
-            var zxcRight = Paginator.PageRight<IEnumerable<int>>();
+            var zxcLeft = Paginator.PagesLeft;
+            var zxcRight = Paginator.PagesRight;
 
             UpdateUI_CurrentPageIs();
         }
@@ -123,37 +127,7 @@ namespace WpfAppFP
         // Validators
         private bool IsValid()
         {
-
-            IsValidItemsPerPage();
-            IsValidPagesToSkip();
-
             return false;
-        }
-
-
-
-        private bool IsValidItemsPerPage()
-        {
-            var res = false;
-
-            //if (CurrentPage > 1)
-            //{
-            //    res = true;
-            //}
-
-            return res;
-        }
-
-        private bool IsValidPagesToSkip()
-        {
-            var res = false;
-
-            //if (CurrentPage > 1)
-            //{
-            //    res = true;
-            //}
-
-            return res;
         }
 
         // Handlers
