@@ -92,7 +92,11 @@ namespace WpfAppFP
             ComboBoxPagesToSkip.SelectedIndex = 0;
             var pagesToSkip = pagesToSkipList.First();
 
-            PageRight = PaginatorScope.PageRight()(currentPage, itemsPerPage, pagesToSkip, db);
+            var ddd = PaginatorScope.Init()(currentPage, itemsPerPage, pagesToSkip, db).PageRight<(IEnumerable<int>, int, int, bool, bool, bool, bool)>()();
+
+            PageRight = ddd;
+
+
 
             UpdateUI_CurrentPageIs();
         }

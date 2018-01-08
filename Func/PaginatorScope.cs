@@ -9,15 +9,18 @@ namespace Func
     public static class PaginatorScope
     {
         public static Func<int, int, int, IEnumerable<int>,
-            (IEnumerable<int> itemsToShow,
-            int currentPage,
+            (
+            int CurrentPage,
+            int ItemsPerPage,
+            int PagesToSkip,
+            IEnumerable<int> DbData,
             int NumberOfPages,
             bool IsValidLeft,
             bool IsValidLeftMore,
             bool IsValidRight,
             bool IsValidRightMore
             )>
-            PageRight()
+            Init()
         {
             return (currentPage, itemsPerPage, pagesToSkip, DbData) =>
             {
@@ -29,13 +32,59 @@ namespace Func
                 var isValidRight = IsValidRight()(currentPage, numberOfPages);
                 var isValidRightMore = IsValidRightMore()(currentPage, pagesToSkip, numberOfPages);
 
-                var itemsToShow = GetItemsToShow(
-                    GetStartIndex(),
-                    GetEndIndex(),
-                    GetDataStartEndIndex())
-                    (currentPage, itemsPerPage, DbData);
+                return (currentPage, itemsPerPage, pagesToSkip, DbData, numberOfPages, isValidLeft, isValidLeftMore, isValidRight, isValidRightMore);
+            };
+        }
 
-                return (itemsToShow, currentPage, numberOfPages, isValidLeft, isValidLeftMore, isValidRight, isValidRightMore);
+        public static Func<(IEnumerable<int>, int, int, bool, bool, bool, bool)>
+            PageRight<TRes>
+            (this
+                (int CurrentPage,
+                 int ItemsPerPage,
+                 int PagesToSkip,
+                 IEnumerable<int> DbData,
+                 int NumberOfPages,
+                 bool IsValidLeft,
+                 bool IsValidLeftMore,
+                 bool IsValidRight,
+                 bool IsValidRightMore) tuple
+            )
+        {
+            return () =>
+            {
+                var itemsToShow = GetItemsToShow(
+                     GetLeftIndex(),
+                     GetRightIndex(),
+                     GetDataStartEndIndex())
+                     (tuple.CurrentPage, tuple.ItemsPerPage, tuple.DbData);
+
+                return (itemsToShow, tuple.CurrentPage, tuple.NumberOfPages, tuple.IsValidLeft, tuple.IsValidLeftMore, tuple.IsValidRight, tuple.IsValidRightMore);
+            };
+        }
+
+        public static Func<(IEnumerable<int>, int, int, bool, bool, bool, bool)>
+            PageLeft<TRes>
+            (this
+                (int CurrentPage,
+                 int ItemsPerPage,
+                 int PagesToSkip,
+                 IEnumerable<int> DbData,
+                 int NumberOfPages,
+                 bool IsValidLeft,
+                 bool IsValidLeftMore,
+                 bool IsValidRight,
+                 bool IsValidRightMore) tuple
+            )
+        {
+            return () =>
+            {
+                var itemsToShow = GetItemsToShow(
+                     GetRightIndex(),
+                     GetLeftIndex(),
+                     GetDataStartEndIndex())
+                     (tuple.CurrentPage, tuple.ItemsPerPage, tuple.DbData);
+
+                return (itemsToShow, tuple.CurrentPage, tuple.NumberOfPages, tuple.IsValidLeft, tuple.IsValidLeftMore, tuple.IsValidRight, tuple.IsValidRightMore);
             };
         }
 
@@ -54,7 +103,7 @@ namespace Func
             };
         }
 
-        private static Func<int, int, int> GetStartIndex()
+        private static Func<int, int, int> GetLeftIndex()
         {
             return (CurrentPage, ItemsPerPage) =>
             {
@@ -62,7 +111,7 @@ namespace Func
             };
         }
 
-        private static Func<int, int, int> GetEndIndex()
+        private static Func<int, int, int> GetRightIndex()
         {
             return (CurrentPage, ItemsPerPage) =>
             {
