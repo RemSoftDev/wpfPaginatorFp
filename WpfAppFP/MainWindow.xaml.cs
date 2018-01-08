@@ -31,19 +31,21 @@ namespace WpfAppFP
         }
 
         private (
-             IEnumerable<int> itemsToShow,
-             int CurrentPage,
-             int NumberOfPages,
-             bool IsValidLeft,
-             bool IsValidLeftMore,
-             bool IsValidRight,
-             bool IsValidRightMore
-             )
-             PageRight;
+            int CurrentPage,
+            int ItemsPerPage,
+            int PagesToSkip,
+            IEnumerable<int> DbData,
+            int NumberOfPages,
+            bool IsValidLeft,
+            bool IsValidLeftMore,
+            bool IsValidRight,
+            bool IsValidRightMore
+            )
+             Paginator;
 
         private void SetDataToShow()
         {
-            ListDB.ItemsSource = PageRight.itemsToShow;
+            ListDB.ItemsSource = Paginator.PageRight<IEnumerable<int>>();
         }
 
         // Initialisations
@@ -57,29 +59,29 @@ namespace WpfAppFP
 
         private void DisableLeft()
         {
-            Name_ButtonLeft.IsEnabled = PageRight.IsValidLeft;
+            Name_ButtonLeft.IsEnabled = Paginator.IsValidLeft;
         }
 
         private void DisableLeftMore()
         {
-            Name_ButtonLeftMore.IsEnabled = PageRight.IsValidLeftMore;
+            Name_ButtonLeftMore.IsEnabled = Paginator.IsValidLeftMore;
         }
 
         private void DisableRight()
         {
-            Name_ButtonRight.IsEnabled = PageRight.IsValidRight;
+            Name_ButtonRight.IsEnabled = Paginator.IsValidRight;
         }
 
         private void DisableRightMore()
         {
-            Name_ButtonRightMore.IsEnabled = PageRight.IsValidRightMore;
+            Name_ButtonRightMore.IsEnabled = Paginator.IsValidRightMore;
         }
 
         void InitPaginator()
         {
             var db = MOCK_InitializeData();
 
-            var currentPage = 1;
+            var currentPage = 2;
 
             var itemsPerPageList = MOCK_InitializeItemsPerPage();
             var pagesToSkipList = MOCK_InitializeItemsPagesToSkip();
@@ -92,11 +94,10 @@ namespace WpfAppFP
             ComboBoxPagesToSkip.SelectedIndex = 0;
             var pagesToSkip = pagesToSkipList.First();
 
-            var ddd = PaginatorScope.Init()(currentPage, itemsPerPage, pagesToSkip, db).PageRight<(IEnumerable<int>, int, int, bool, bool, bool, bool)>()();
+            Paginator = PaginatorScope.Init()(currentPage, itemsPerPage, pagesToSkip, db);
 
-            PageRight = ddd;
-
-
+            var zxcLeft = Paginator.PageLeft<IEnumerable<int>>()();
+            var zxcRight = Paginator.PageRight<IEnumerable<int>>();
 
             UpdateUI_CurrentPageIs();
         }
@@ -189,7 +190,7 @@ namespace WpfAppFP
         // Update UI
         private void UpdateUI_CurrentPageIs()
         {
-            Name_CurrentPageIs.Text = PageRight.CurrentPage.ToString();
+            Name_CurrentPageIs.Text = Paginator.CurrentPage.ToString();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Func
             };
         }
 
-        public static Func<(IEnumerable<int>, int, int, bool, bool, bool, bool)>
+        public static IEnumerable<int>
             PageRight<TRes>
             (this
                 (int CurrentPage,
@@ -50,19 +50,16 @@ namespace Func
                  bool IsValidRightMore) tuple
             )
         {
-            return () =>
-            {
                 var itemsToShow = GetItemsToShow(
                      GetLeftIndex(),
                      GetRightIndex(),
                      GetDataStartEndIndex())
                      (tuple.CurrentPage, tuple.ItemsPerPage, tuple.DbData);
 
-                return (itemsToShow, tuple.CurrentPage, tuple.NumberOfPages, tuple.IsValidLeft, tuple.IsValidLeftMore, tuple.IsValidRight, tuple.IsValidRightMore);
-            };
+                return (itemsToShow);
         }
 
-        public static Func<(IEnumerable<int>, int, int, bool, bool, bool, bool)>
+        public static Func<IEnumerable<int>>
             PageLeft<TRes>
             (this
                 (int CurrentPage,
@@ -79,12 +76,12 @@ namespace Func
             return () =>
             {
                 var itemsToShow = GetItemsToShow(
-                     GetRightIndex(),
                      GetLeftIndex(),
+                     GetRightIndex(),                    
                      GetDataStartEndIndex())
-                     (tuple.CurrentPage, tuple.ItemsPerPage, tuple.DbData);
+                     (tuple.CurrentPage-1, tuple.ItemsPerPage, tuple.DbData);
 
-                return (itemsToShow, tuple.CurrentPage, tuple.NumberOfPages, tuple.IsValidLeft, tuple.IsValidLeftMore, tuple.IsValidRight, tuple.IsValidRightMore);
+                return (itemsToShow);
             };
         }
 
