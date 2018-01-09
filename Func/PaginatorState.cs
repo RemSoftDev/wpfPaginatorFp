@@ -10,11 +10,33 @@ namespace Func
 
         }
 
+        public PaginatorState(PaginatorState old)
+        {
+            CurrentPage = old.CurrentPage;
+            ItemsPerPage = old.ItemsPerPage;
+            PagesToSkip = old.PagesToSkip;
+            NumberOfPages = old.NumberOfPages;
+            TotalNumberOfItemsInDB = old.TotalNumberOfItemsInDB;
+
+            IsValidLeft = old.IsValidLeft;
+            IsValidLeftMore = old.IsValidLeftMore;
+            IsValidRight = old.IsValidRight;
+            IsValidRightMore = old.IsValidRightMore;
+
+            DbData = old.DbData;
+
+            PagesRight = old.PagesRight;
+            PagesRightMore = old.PagesRightMore;
+            PagesLeft = old.PagesLeft;
+            PagesLeftMore = old.PagesLeftMore;
+        }
+
         public PaginatorState(
             int pCurrentPage,
             int pItemsPerPage,
             int pPagesToSkip,
             int pNumberOfPages,
+            int pTotalNumberOfItemsInDB,
 
             bool pIsValidLeft,
             bool pIsValidLeftMore,
@@ -33,6 +55,7 @@ namespace Func
             ItemsPerPage = pItemsPerPage;
             PagesToSkip = pPagesToSkip;
             NumberOfPages = pNumberOfPages;
+            TotalNumberOfItemsInDB = pTotalNumberOfItemsInDB;
 
             IsValidLeft = pIsValidLeft;
             IsValidLeftMore = pIsValidLeftMore;
@@ -51,6 +74,7 @@ namespace Func
         public int ItemsPerPage;
         public int PagesToSkip;
         public int NumberOfPages;
+        public int TotalNumberOfItemsInDB;
 
         public bool IsValidLeft;
         public bool IsValidLeftMore;

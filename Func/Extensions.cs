@@ -66,5 +66,16 @@ namespace Func
             enumerable.AddRange(withCollection);
             return enumerable;
         }
+
+        public static PaginatorState
+            With
+                (
+                this PaginatorState state,
+                 Action<PaginatorState> mutators
+                )
+        {
+            mutators(state);
+            return state;
+        }
     }
 }
