@@ -131,12 +131,12 @@ namespace Func
 
         public static Func<IEnumerable<int>>
             PagesLeft(
-           Func CurrentPage(), int ItemsPerPage, IEnumerable<int> DbData
+           int CurrentPage, int ItemsPerPage, IEnumerable<int> DbData
             )
         {
             return () =>
             {
-                return GetPages()(CurrentPage(), ItemsPerPage, DbData);
+                return GetPages()(CurrentPage, ItemsPerPage, DbData);
             };
         }
 
@@ -204,70 +204,23 @@ namespace Func
         }
 
         private static Func<int, bool>
-            IsValidLeft()
-        {
-            return (CurrentPage) =>
-            {
-                var res = false;
-
-                if (CurrentPage > 1)
-                {
-                    res = true;
-                }
-
-                return res;
-            };
-        }
+            IsValidLeft() => (CurrentPage) => CurrentPage > 1;
 
         private static Func<int, int, bool>
-            IsValidLeftMore()
-        {
-            return (CurrentPage, PagesToSkip) =>
-            {
-                var res = false;
-
-                if (CurrentPage - PagesToSkip > 1)
-                {
-                    res = true;
-                }
-
-                return res;
-            };
-        }
+            IsValidLeftMore() => (CurrentPage, PagesToSkip) => CurrentPage - PagesToSkip > 1;
 
         private static Func<int, int, bool>
             IsValidRight() => (CurrentPage, NumberOfPages) => CurrentPage < NumberOfPages;
 
-
         private static Func<int, int, int, bool>
-            IsValidRightMore()
-        {
-            return (CurrentPage, PagesToSkip, NumberOfPages) =>
-            {
-                var res = false;
-
-                if (CurrentPage + PagesToSkip < NumberOfPages)
-                {
-                    res = true;
-                }
-
-                return res;
-            };
-        }
+            IsValidRightMore() => (CurrentPage, PagesToSkip, NumberOfPages) => CurrentPage + PagesToSkip < NumberOfPages;
 
         private static Func<int, int, int, bool>
             IsValidItemsPerPage()
         {
             return (CurrentPage, PagesToSkip, NumberOfPages) =>
             {
-                var res = false;
-
-                //if (CurrentPage + PagesToSkip < NumberOfPages)
-                //{
-                //    res = true;
-                //}
-
-                return res;
+                return false;
             };
         }
 
@@ -276,14 +229,7 @@ namespace Func
         {
             return (CurrentPage, PagesToSkip, NumberOfPages) =>
             {
-                var res = false;
-
-                //if (CurrentPage + PagesToSkip < NumberOfPages)
-                //{
-                //    res = true;
-                //}
-
-                return res;
+                return false;
             };
         }
     }
