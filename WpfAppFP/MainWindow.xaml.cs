@@ -30,22 +30,7 @@ namespace WpfAppFP
             UpdateUI();
         }
 
-        private (
-            int CurrentPage,
-            int ItemsPerPage,
-            int PagesToSkip,
-            IEnumerable<int> DbData,
-            Func<IEnumerable<int>> PagesRight,
-            Func<IEnumerable<int>> PagesRightMore,
-            Func<IEnumerable<int>> PagesLeft,
-            Func<IEnumerable<int>> PagesLeftMore,
-            int NumberOfPages,
-            bool IsValidLeft,
-            bool IsValidLeftMore,
-            bool IsValidRight,
-            bool IsValidRightMore
-            )
-             Paginator;
+        private PaginatorState Paginator;
 
         // Initialisations
         private void DisableElements()

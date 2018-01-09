@@ -9,21 +9,7 @@ namespace Func
     public static class PaginatorScope
     {
         public static Func<int, int, int, IEnumerable<int>,
-            (
-            int CurrentPage,
-            int ItemsPerPage,
-            int PagesToSkip,
-            IEnumerable<int> DbData,
-            Func<IEnumerable<int>> PagesRight,
-            Func<IEnumerable<int>> PagesRightMore,
-            Func<IEnumerable<int>> PagesLeft,
-            Func<IEnumerable<int>> PagesLeftMore,
-            int NumberOfPages,
-            bool IsValidLeft,
-            bool IsValidLeftMore,
-            bool IsValidRight,
-            bool IsValidRightMore
-            )>
+            PaginatorState>
             Init()
         {
             return (currentPage, itemsPerPage, pagesToSkip, DbData) =>
@@ -42,68 +28,33 @@ namespace Func
                 var pagesLeft = PagesLeft(currentPage, itemsPerPage, DbData);
                 var pagesLeftMore = PagesRight(currentPage, itemsPerPage, DbData);
 
-                return (
+                return new PaginatorState(
                     currentPage,
                     itemsPerPage,
                     pagesToSkip,
-                    DbData,
-                    pagesRight,
-                    pagesRightMore,
-                    pagesLeft,
-                    pagesLeftMore,
                     numberOfPages,
                     isValidLeft,
                     isValidLeftMore,
                     isValidRight,
-                    isValidRightMore);
+                    isValidRightMore,
+                    DbData,
+                    pagesRight,
+                    pagesRightMore,
+                    pagesLeft,
+                    pagesLeftMore);
             };
         }
 
-        public static TRes PipeForward<TArg, TRes>(
-           this TArg arg,
-           Func<TArg, TRes> func)
-        {
-            return func(arg);
-        }
-
-        public static (int, int, int, IEnumerable<int>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, int, bool, bool, bool, bool)
+        public static PaginatorState
             GoRight<TRes>(
-            this (
-                int CurrentPage,
-                int ItemsPerPage,
-                int PagesToSkip,
-                IEnumerable<int> DbData,
-                Func<IEnumerable<int>> PagesRight,
-                Func<IEnumerable<int>> PagesRightMore,
-                Func<IEnumerable<int>> PagesLeft,
-                Func<IEnumerable<int>> PagesLeftMore,
-                int NumberOfPages,
-                bool IsValidLeft,
-                bool IsValidLeftMore,
-                bool IsValidRight,
-                bool IsValidRightMore
-                ) arg)
+            this PaginatorState arg)
         {
             return Init()(++arg.CurrentPage, arg.ItemsPerPage, arg.PagesToSkip, arg.DbData);
         }
 
-        public static (int, int, int, IEnumerable<int>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, int, bool, bool, bool, bool)
+        public static PaginatorState
             GoLeft<TRes>(
-            this (
-                int CurrentPage,
-                int ItemsPerPage,
-                int PagesToSkip,
-                IEnumerable<int> DbData,
-                Func<IEnumerable<int>> PagesRight,
-                Func<IEnumerable<int>> PagesRightMore,
-                Func<IEnumerable<int>> PagesLeft,
-                Func<IEnumerable<int>> PagesLeftMore,
-                int NumberOfPages,
-                bool IsValidLeft,
-                bool IsValidLeftMore,
-                bool IsValidRight,
-                bool IsValidRightMore
-                ) arg)
+            this PaginatorState arg)
         {
             return Init()(--arg.CurrentPage, arg.ItemsPerPage, arg.PagesToSkip, arg.DbData);
         }
@@ -113,7 +64,7 @@ namespace Func
         {
             var itemsToShowFunc = GetItemsToShow(
                  GetLeftIndex(),
-                 GetRightIndex(),
+                 RightIndex,
                  GetDataStartEndIndex());
 
             return itemsToShowFunc;
@@ -121,13 +72,10 @@ namespace Func
 
         public static Func<IEnumerable<int>>
             PagesRight(
-            int CurrentPage, int ItemsPerPage, IEnumerable<int> DbData)
-        {
-            return () =>
-            {
-                return GetPages()(CurrentPage, ItemsPerPage, DbData);
-            };
-        }
+            int CurrentPage, int ItemsPerPage, IEnumerable<int> DbData) => () =>
+                {
+                    return GetPages()(CurrentPage, ItemsPerPage, DbData);
+                };
 
         public static Func<IEnumerable<int>>
             PagesLeft(
@@ -158,50 +106,32 @@ namespace Func
         }
 
         private static Func<int, int, int>
-            GetLeftIndex()
-        {
-            return (CurrentPage, ItemsPerPage) =>
-            {
-                return (CurrentPage - 1) * ItemsPerPage;
-            };
-        }
+            GetLeftIndex() => (CurrentPage, ItemsPerPage) =>
+                {
+                    return (CurrentPage - 1) * ItemsPerPage;
+                };
 
-        private static Func<int, int, int>
-            GetRightIndex()
-        {
-            return (CurrentPage, ItemsPerPage) =>
-            {
-                return CurrentPage * ItemsPerPage;
-            };
-        }
+        private static Func<int, int, int> 
+            RightIndex => (CurrentPage, ItemsPerPage) =>
+                {
+                    return CurrentPage * ItemsPerPage;
+                };
 
         private static Func<int, int, IEnumerable<int>, IEnumerable<int>>
-            GetDataStartEndIndex()
-        {
-            return (startIndex, endIndex, DbData) =>
-            {
-                return DbData.Where(z => z > startIndex && z <= endIndex);
-            };
-        }
+            GetDataStartEndIndex() => (startIndex, endIndex, DbData) =>
+                {
+                    return DbData.Where(z => z > startIndex && z <= endIndex);
+                };
 
         private static Func<IEnumerable<int>, int>
-            GetTotalNumberOfItemsInDB()
-        {
-            return (DbData) =>
-            {
-                return DbData.Count();
-            };
-        }
+            GetTotalNumberOfItemsInDB() => (DbData) => DbData.Count();
 
         private static Func<int, int, int>
-            GetNumberOfPages()
-        {
-            return (TotalNumberOfItemsInDB, ItemsPerPage) =>
-            {
-                var res = (int)Math.Round((double)TotalNumberOfItemsInDB / ItemsPerPage, 0, MidpointRounding.AwayFromZero);
-                return res;
-            };
-        }
+            GetNumberOfPages() => (TotalNumberOfItemsInDB, ItemsPerPage) =>
+                {
+                    var res = (int)Math.Round((double)TotalNumberOfItemsInDB / ItemsPerPage, 0, MidpointRounding.AwayFromZero);
+                    return res;
+                };
 
         private static Func<int, bool>
             IsValidLeft() => (CurrentPage) => CurrentPage > 1;
