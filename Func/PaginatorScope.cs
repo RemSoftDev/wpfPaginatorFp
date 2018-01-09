@@ -8,36 +8,36 @@ namespace Func
 {
     public static class PaginatorScope
     {
-        public static Func<int, int, int, IEnumerable<int>,
+        public static Func<PaginatorState,
             PaginatorState>
             Init()
         {
-            return (currentPage, itemsPerPage, pagesToSkip, DbData) =>
+            return (paginatorState) =>
             {
-                var totalNumberOfItemsInDB = GetTotalNumberOfItemsInDB()(DbData);
-                var numberOfPages = GetNumberOfPages()(totalNumberOfItemsInDB, itemsPerPage);
+                var totalNumberOfItemsInDB = GetTotalNumberOfItemsInDB()(paginatorState.DbData);
+                var numberOfPages = GetNumberOfPages()(totalNumberOfItemsInDB, paginatorState.ItemsPerPage);
 
-                var isValidLeft = IsValidLeft()(currentPage);
-                var isValidLeftMore = IsValidLeftMore()(currentPage, pagesToSkip);
-                var isValidRight = IsValidRight()(currentPage, numberOfPages);
-                var isValidRightMore = IsValidRightMore()(currentPage, pagesToSkip, numberOfPages);
+                var isValidLeft = IsValidLeft()(paginatorState.CurrentPage);
+                var isValidLeftMore = IsValidLeftMore()(paginatorState.CurrentPage, paginatorState.PagesToSkip);
+                var isValidRight = IsValidRight()(paginatorState.CurrentPage, numberOfPages);
+                var isValidRightMore = IsValidRightMore()(paginatorState.CurrentPage, paginatorState.PagesToSkip, numberOfPages);
 
-                var pagesRight = PagesRight(currentPage, itemsPerPage, DbData);
-                var pagesRightMore = PagesRight(currentPage, itemsPerPage, DbData);
+                var pagesRight = PagesRight(paginatorState.CurrentPage, paginatorState.ItemsPerPage, paginatorState.DbData);
+                var pagesRightMore = PagesRight(paginatorState.CurrentPage, paginatorState.ItemsPerPage, paginatorState.DbData);
 
-                var pagesLeft = PagesLeft(currentPage, itemsPerPage, DbData);
-                var pagesLeftMore = PagesRight(currentPage, itemsPerPage, DbData);
+                var pagesLeft = PagesLeft(paginatorState.CurrentPage, paginatorState.ItemsPerPage, paginatorState.DbData);
+                var pagesLeftMore = PagesRight(paginatorState.CurrentPage, paginatorState.ItemsPerPage, paginatorState.DbData);
 
                 return new PaginatorState(
-                    currentPage,
-                    itemsPerPage,
-                    pagesToSkip,
+                    paginatorState.CurrentPage,
+                    paginatorState.ItemsPerPage,
+                    paginatorState.PagesToSkip,
                     numberOfPages,
                     isValidLeft,
                     isValidLeftMore,
                     isValidRight,
                     isValidRightMore,
-                    DbData,
+                    paginatorState.DbData,
                     pagesRight,
                     pagesRightMore,
                     pagesLeft,
@@ -49,14 +49,16 @@ namespace Func
             GoRight<TRes>(
             this PaginatorState arg)
         {
-            return Init()(++arg.CurrentPage, arg.ItemsPerPage, arg.PagesToSkip, arg.DbData);
+            ++arg.CurrentPage;
+            return Init()(arg);
         }
 
         public static PaginatorState
             GoLeft<TRes>(
             this PaginatorState arg)
         {
-            return Init()(--arg.CurrentPage, arg.ItemsPerPage, arg.PagesToSkip, arg.DbData);
+            --arg.CurrentPage;
+            return Init()(arg);
         }
 
         public static Func<int, int, IEnumerable<int>, IEnumerable<int>>

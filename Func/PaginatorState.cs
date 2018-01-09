@@ -5,6 +5,11 @@ namespace Func
 {
     public class PaginatorState
     {
+        public PaginatorState()
+        {
+
+        }
+
         public PaginatorState(
             int pCurrentPage,
             int pItemsPerPage,

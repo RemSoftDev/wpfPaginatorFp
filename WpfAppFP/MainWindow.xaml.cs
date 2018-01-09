@@ -30,7 +30,7 @@ namespace WpfAppFP
             UpdateUI();
         }
 
-        private PaginatorState Paginator;
+        private PaginatorState Paginator = new PaginatorState();
 
         // Initialisations
         private void DisableElements()
@@ -63,22 +63,22 @@ namespace WpfAppFP
 
         void InitPaginator()
         {
-            var db = MOCK_InitializeData();
+            Paginator.DbData = MOCK_InitializeData();
 
-            var currentPage = 1;
+            Paginator.CurrentPage = 1;
 
             var itemsPerPageList = MOCK_InitializeItemsPerPage();
             var pagesToSkipList = MOCK_InitializeItemsPagesToSkip();
 
             ComboBoxItemsPerPage.ItemsSource = itemsPerPageList;
             ComboBoxItemsPerPage.SelectedIndex = 0;
-            var itemsPerPage = itemsPerPageList.First();
+            Paginator.ItemsPerPage = itemsPerPageList.First();
 
             ComboBoxPagesToSkip.ItemsSource = pagesToSkipList;
             ComboBoxPagesToSkip.SelectedIndex = 0;
-            var pagesToSkip = pagesToSkipList.First();
+            Paginator.PagesToSkip = pagesToSkipList.First();
 
-            Paginator = PaginatorScope.Init()(currentPage, itemsPerPage, pagesToSkip, db);
+            Paginator = PaginatorScope.Init()(Paginator);
 
             var zxcLeft = Paginator.PagesLeft;
             var zxcRight = Paginator.PagesRight;
