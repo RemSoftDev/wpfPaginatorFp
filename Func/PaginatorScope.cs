@@ -56,6 +56,12 @@ namespace Func
             return Init()(paginatorState.With(z => z.CurrentPage -= paginatorState.PagesToSkip));
         }
 
+        public static Func<PaginatorState, PaginatorState>
+            PagesToShow() => (paginatorState) =>
+                {
+                    return paginatorState.With(z => z.PagesToShow = () => GetPages()(paginatorState));
+                };
+
         public static Func<PaginatorState, IEnumerable<int>>
             GetPages()
         {
@@ -64,12 +70,6 @@ namespace Func
                      RightIndex,
                      GetDataStartEndIndex());
         }
-
-        public static Func<PaginatorState, PaginatorState>
-            PagesToShow() => (paginatorState) =>
-                {
-                    return paginatorState.With(z => z.PagesToShow = () => GetPages()(paginatorState));
-                };
 
         private static Func<PaginatorState, IEnumerable<int>>
             GetItemsToShow(
@@ -146,14 +146,14 @@ namespace Func
 
         private static Func<PaginatorState, bool>
            IsValidItemsPerPage() => (paginatorState) =>
-                {
-                    return false;
-                };
+                 {
+                     return false;
+                 };
 
         private static Func<PaginatorState, bool>
             IsValidPagesToSkip() => (paginatorState) =>
-                {
-                    return false;
-                };
+                 {
+                     return false;
+                 };
     }
 }

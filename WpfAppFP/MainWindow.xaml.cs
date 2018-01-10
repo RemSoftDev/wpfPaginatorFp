@@ -65,9 +65,6 @@ namespace WpfAppFP
             Paginator.PagesToSkip = pagesToSkipList.First();
 
             Paginator = PaginatorScope.Init()(Paginator);
-
-            var zxcLeft = Paginator.PagesLeft;
-            var zxcRight = Paginator.PagesRight;
         }
 
         //  MOCK

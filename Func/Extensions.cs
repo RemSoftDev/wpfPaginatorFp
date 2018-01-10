@@ -54,6 +54,7 @@ namespace Func
         {
             var enumerable = new List<T>(collection);
             enumerable.AddRange(withCollection);
+
             return enumerable;
         }
 
