@@ -1,32 +1,18 @@
 ﻿using Func;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WpfAppFP
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-            InitPaginator();           
+            InitPaginator();
 
-            UpdateUI_SetDataToShow(Paginator.PagesRight());
             UpdateUI();
         }
 
@@ -84,6 +70,7 @@ namespace WpfAppFP
             var zxcRight = Paginator.PagesRight;
         }
 
+        //  MOCK
         private List<int> MOCK_InitializeData()
         {
             var res = Enumerable.Range(0, 100).ToList();
@@ -102,59 +89,55 @@ namespace WpfAppFP
             return res;
         }
 
-        // Validators
-        private bool IsValid()
-        {
-            return false;
-        }
-
         // Handlers
-        private void Button_Click_Left(object sender, RoutedEventArgs e)
+        private void Button_Click_Left
+            (object sender, RoutedEventArgs e)
         {
             if (Paginator.IsValidLeft)
             {
-                Paginator = Paginator.GoLeft<(int, int, int, IEnumerable<int>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, int, bool, bool, bool, bool)>();
-
-                UpdateUI_SetDataToShow(Paginator.PagesLeft());
-
+                Paginator = Paginator.GoLeft<PaginatorState>();
                 UpdateUI();
             }
         }
 
-        private void Button_Click_LeftMore(object sender, RoutedEventArgs e)
+        private void Button_Click_LeftMore
+            (object sender, RoutedEventArgs e)
         {
             if (Paginator.IsValidLeftMore)
             {
-
-            }
-        }
-
-        private void Button_Click_Right(object sender, RoutedEventArgs e)
-        {
-            if (Paginator.IsValidRight)
-            {
-                Paginator = Paginator.GoRight<(int, int, int, IEnumerable<int>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, Func<IEnumerable<int>>, int, bool, bool, bool, bool)>();
-
-                UpdateUI_SetDataToShow(Paginator.PagesRight());
-
+                Paginator = Paginator.GoLeftMore<PaginatorState>();
                 UpdateUI();
             }
         }
 
-        private void Button_Click_RightMore(object sender, RoutedEventArgs e)
+        private void Button_Click_Right
+            (object sender, RoutedEventArgs e)
         {
-            if (Paginator.IsValidRightMore)
+            if (Paginator.IsValidRight)
             {
-
+                Paginator = Paginator.GoRight<PaginatorState>();
+                UpdateUI();
             }
         }
 
-        private void ComboBoxPagesToSkip_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Button_Click_RightMore
+            (object sender, RoutedEventArgs e)
+        {
+            if (Paginator.IsValidRightMore)
+            {
+                Paginator = Paginator.GoRightMore<PaginatorState>();
+                UpdateUI();
+            }
+        }
+
+        private void ComboBoxPagesToSkip_SelectionChanged
+            (object sender, SelectionChangedEventArgs e)
         {
 
         }
 
-        private void ComboBoxItemsPerPage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBoxItemsPerPage_SelectionChanged
+            (object sender, SelectionChangedEventArgs e)
         {
 
         }
@@ -164,7 +147,7 @@ namespace WpfAppFP
         {
             DisableElements();
             UpdateUI_CurrentPageIs();
-
+            UpdateUI_SetDataToShow(Paginator.PagesToShow());
         }
 
         private void UpdateUI_CurrentPageIs()

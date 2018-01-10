@@ -7,33 +7,27 @@ namespace Func
     {
         public static TRes
             PipeForward
-            <TArg, TRes>
-                (
+            <TArg, TRes>(
                 this TArg arg,
-                Func<TArg, TRes> func
-                )
+                Func<TArg, TRes> func)
         {
             return func(arg);
         }
 
         public static TRes
             Apply
-            <TArg, TRes>
-                (
+            <TArg, TRes>(
                 this Func<TArg, TRes> func,
-                TArg arg
-                )
+                TArg arg)
         {
             return func(arg);
         }
 
         public static Func<TArg2, TRes>
             Curry
-            <TArg1, TArg2, TRes>
-                (
+            <TArg1, TArg2, TRes>(
                 this Func<TArg1, TArg2, TRes> func,
-                TArg1 arg1
-                )
+                TArg1 arg1)
         {
             return arg2 => func(
                 arg1,
@@ -42,11 +36,9 @@ namespace Func
 
         public static Func<TArg2, Func<TArg3, TRes>>
             Curry
-            <TArg1, TArg2, TArg3, TRes>
-                (
+            <TArg1, TArg2, TArg3, TRes>(
                 this Func<TArg1, TArg2, TArg3, TRes> func,
-                TArg1 arg1
-                )
+                TArg1 arg1)
         {
             return arg2 => arg3 => func(
                 arg1,
@@ -56,11 +48,9 @@ namespace Func
 
         public static IEnumerable<T>
             With
-            <T>
-                (
+            <T>(
                 this IEnumerable<T> collection,
-                IEnumerable<T> withCollection
-                )
+                IEnumerable<T> withCollection)
         {
             var enumerable = new List<T>(collection);
             enumerable.AddRange(withCollection);
@@ -68,14 +58,16 @@ namespace Func
         }
 
         public static PaginatorState
-            With
-                (
+            With(
                 this PaginatorState state,
-                 Action<PaginatorState> mutators
-                )
+                params Action<PaginatorState>[] mutators)
         {
-            mutators(state);
-            return state;
+            foreach (var item in mutators)
+            {
+                item(state);
+            }
+
+            return new PaginatorState(state);
         }
     }
 }

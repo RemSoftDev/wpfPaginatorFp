@@ -25,6 +25,7 @@ namespace Func
 
             DbData = old.DbData;
 
+            PagesToShow = old.PagesToShow;
             PagesRight = old.PagesRight;
             PagesRightMore = old.PagesRightMore;
             PagesLeft = old.PagesLeft;
@@ -45,6 +46,7 @@ namespace Func
 
             IEnumerable<int> pDbData,
 
+            Func<IEnumerable<int>> pPagesToShow,
             Func<IEnumerable<int>> pPagesRight,
             Func<IEnumerable<int>> pPagesRightMore,
             Func<IEnumerable<int>> pPagesLeft,
@@ -64,6 +66,7 @@ namespace Func
 
             DbData = pDbData;
 
+            PagesToShow = pPagesToShow;
             PagesRight = pPagesRight;
             PagesRightMore = pPagesRightMore;
             PagesLeft = pPagesLeft;
@@ -83,6 +86,7 @@ namespace Func
 
         public IEnumerable<int> DbData;
 
+        public Func<IEnumerable<int>> PagesToShow;
         public Func<IEnumerable<int>> PagesRight;
         public Func<IEnumerable<int>> PagesRightMore;
         public Func<IEnumerable<int>> PagesLeft;
