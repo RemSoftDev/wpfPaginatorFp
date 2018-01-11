@@ -20,7 +20,7 @@ namespace WpfAppFP
         private PaginatorState Paginator = new PaginatorState();
 
         // Initialisations
-        private void DisableElements()
+        private void RenderPaginator(PaginatorState paginatorState)
         {
             DisableLeft();
             DisableLeftMore();
