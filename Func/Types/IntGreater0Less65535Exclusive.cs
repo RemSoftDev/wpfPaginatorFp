@@ -24,5 +24,10 @@ namespace Func.Types
                 }
             }
         }
+
+        public static explicit operator IntGreater0Less65535Exclusive(int v)
+        {
+            return new IntGreater0Less65535Exclusive() { Value = Convert.ToUInt16(v) };
+        }
     }
 }
