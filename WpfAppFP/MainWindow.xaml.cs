@@ -63,7 +63,7 @@ namespace WpfAppFP
             ComboBoxPagesToSkip.SelectedIndex = 0;
             Paginator.PagesToSkip.Value = pagesToSkipList.First().Value;
 
-            Paginator = PaginatorScope.Init()(Paginator);
+            CurrentStatePaginator = PaginatorScope.Init()(Paginator, itemsPerPageList.First().Value, pagesToSkipList.First().Value);
         }
 
         //  MOCK
@@ -89,11 +89,9 @@ namespace WpfAppFP
         private void Button_Click_Left
             (object sender, RoutedEventArgs e)
         {
-            if (Paginator.IsValidLeft)
-            {
-                Paginator = Paginator.GoLeft<PaginatorState>();
-                UpdateUI();
-            }
+
+            CurrentStatePaginator = CurrentStatePaginator.GoLeft<PaginatorState>();
+                UpdateUI(CurrentStatePaginator);
         }
 
         private void Button_Click_LeftMore

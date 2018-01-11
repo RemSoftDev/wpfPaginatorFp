@@ -8,7 +8,7 @@ namespace Func
     public static class PaginatorScope
     {
         public static Func<PaginatorState, PaginatorState>
-            Init()
+            NextState()
         {
             return (paginatorState) =>
             {
@@ -26,24 +26,21 @@ namespace Func
         }
 
         public static PaginatorState
-            GoRight
-            <TRes>(
+            GoRight(
             this PaginatorState paginatorState)
         {
             return Init()(paginatorState.With(z => z.CurrentPage.Value++));
         }
 
         public static PaginatorState
-            GoLeft
-            <TRes>(
+            GoLeft(
             this PaginatorState paginatorState)
         {
             return Init()(paginatorState.With(z => z.CurrentPage.Value--));
         }
 
         public static PaginatorState
-            GoRightMore
-            <TRes>(
+            GoRightMore(
             this PaginatorState paginatorState)
         {
             return Init()(paginatorState.With(z => z.CurrentPage.Value += paginatorState.PagesToSkip.Value));
