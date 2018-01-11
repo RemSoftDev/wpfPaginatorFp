@@ -11,7 +11,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-
+        
         <ListBox Grid.Row="0" Name="ListDB"></ListBox>
 
         <DockPanel Grid.Row="1" LastChildFill="True">
@@ -41,6 +41,7 @@
                 <TextBlock  Text="Pages to skip: "/>
 
                 <ComboBox Name="ComboBoxPagesToSkip"  
+                          DisplayMemberPath="Value"
                           SelectionChanged="ComboBoxPagesToSkip_SelectionChanged"   
                           HorizontalAlignment="Center"/>
             </StackPanel>
@@ -52,6 +53,7 @@
                 <TextBlock  Text="Items per page: "/>
 
                 <ComboBox Name="ComboBoxItemsPerPage" 
+                          DisplayMemberPath="Value"
                           SelectionChanged="ComboBoxItemsPerPage_SelectionChanged"  
                           HorizontalAlignment="Center"/>
             </StackPanel>

@@ -81,7 +81,7 @@ namespace WpfAppFP
 
         private IEnumerable<IntGreater0Less65535Exclusive> MOCK_InitializeItemsPagesToSkip()
         {
-            var res = Enumerable.Range(2, 10).Select(i => (IntGreater0Less65535Exclusive)i);
+            var res = Enumerable.Range(2, 5).Select(i => (IntGreater0Less65535Exclusive)i);
             return res;
         }
 
@@ -148,7 +148,7 @@ namespace WpfAppFP
 
         private void UpdateUI_CurrentPageIs()
         {
-            Name_CurrentPageIs.Text = Paginator.CurrentPage.ToString();
+            Name_CurrentPageIs.Text = Paginator.CurrentPage.Value.ToString();
         }
 
         private void UpdateUI_SetDataToShow(IEnumerable<int> data)
