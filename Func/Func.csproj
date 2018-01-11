@@ -44,6 +44,8 @@
     <Compile Include="PaginatorScope.cs" />
     <Compile Include="PaginatorState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Types\IntGreater0Less32767Exclusive.cs" />
+    <Compile Include="Types\IntGreater0Less65535Exclusive.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Func.Types;
+using System;
 using System.Collections.Generic;
 
 namespace Func
@@ -7,7 +8,9 @@ namespace Func
     {
         public PaginatorState()
         {
-
+            CurrentPage = new IntGreater0Less65535Exclusive();
+            ItemsPerPage = new IntGreater0Less65535Exclusive();
+            PagesToSkip = new IntGreater0Less65535Exclusive();
         }
 
         public PaginatorState(PaginatorState old)
@@ -33,9 +36,10 @@ namespace Func
         }
 
         public PaginatorState(
-            int pCurrentPage,
-            int pItemsPerPage,
-            int pPagesToSkip,
+            IntGreater0Less65535Exclusive pCurrentPage,
+            IntGreater0Less65535Exclusive pItemsPerPage,
+            IntGreater0Less65535Exclusive pPagesToSkip,
+
             int pNumberOfPages,
             int pTotalNumberOfItemsInDB,
 
@@ -73,9 +77,10 @@ namespace Func
             PagesLeftMore = pPagesLeftMore;
         }
 
-        public int CurrentPage;
-        public int ItemsPerPage;
-        public int PagesToSkip;
+        public IntGreater0Less65535Exclusive CurrentPage;
+        public IntGreater0Less65535Exclusive ItemsPerPage;
+        public IntGreater0Less65535Exclusive PagesToSkip;
+
         public int NumberOfPages;
         public int TotalNumberOfItemsInDB;
 

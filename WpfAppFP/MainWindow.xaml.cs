@@ -51,18 +51,16 @@ namespace WpfAppFP
         {
             Paginator.DbData = MOCK_InitializeData();
 
-            Paginator.CurrentPage = 1;
-
             var itemsPerPageList = MOCK_InitializeItemsPerPage();
             var pagesToSkipList = MOCK_InitializeItemsPagesToSkip();
 
             ComboBoxItemsPerPage.ItemsSource = itemsPerPageList;
             ComboBoxItemsPerPage.SelectedIndex = 0;
-            Paginator.ItemsPerPage = itemsPerPageList.First();
+            Paginator.ItemsPerPage.Value = itemsPerPageList.First();
 
             ComboBoxPagesToSkip.ItemsSource = pagesToSkipList;
             ComboBoxPagesToSkip.SelectedIndex = 0;
-            Paginator.PagesToSkip = pagesToSkipList.First();
+            Paginator.PagesToSkip.Value = pagesToSkipList.First();
 
             Paginator = PaginatorScope.Init()(Paginator);
         }
@@ -74,15 +72,15 @@ namespace WpfAppFP
             return res;
         }
 
-        private List<int> MOCK_InitializeItemsPerPage()
+        private IEnumerable<ushort> MOCK_InitializeItemsPerPage()
         {
-            var res = Enumerable.Range(2, 10).ToList();
+            var res = Enumerable.Range(2, 10).Select(i => (ushort)i);
             return res;
         }
 
-        private List<int> MOCK_InitializeItemsPagesToSkip()
+        private IEnumerable<ushort> MOCK_InitializeItemsPagesToSkip()
         {
-            var res = Enumerable.Range(2, 5).ToList();
+            var res = Enumerable.Range(2, 10).Select(i => (ushort)i);
             return res;
         }
 
