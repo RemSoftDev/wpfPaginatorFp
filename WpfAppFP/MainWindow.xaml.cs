@@ -13,57 +13,61 @@ namespace WpfAppFP
         {
             InitializeComponent();
             InitPaginator();
-
-            UpdateUI();
         }
 
-        private PaginatorState Paginator = new PaginatorState();
+        private PaginatorState PaginatorCurrentState;
 
         // Initialisations
-        private void RenderPaginator(PaginatorState paginatorState)
+        private void DisableElements(PaginatorState pPaginatorState)
         {
-            DisableLeft();
-            DisableLeftMore();
-            DisableRight();
-            DisableRightMore();
+            DisableLeft(pPaginatorState.IsValidLeft);
+            DisableLeftMore(pPaginatorState.IsValidLeftMore);
+            DisableRight(pPaginatorState.IsValidRight);
+            DisableRightMore(pPaginatorState.IsValidRightMore);
         }
 
-        private void DisableLeft()
+        private void DisableLeft(bool pIsEnabled)
         {
-            Name_ButtonLeft.IsEnabled = Paginator.IsValidLeft;
+            Name_ButtonLeft.IsEnabled = pIsEnabled;
         }
 
-        private void DisableLeftMore()
+        private void DisableLeftMore(bool pIsEnabled)
         {
-            Name_ButtonLeftMore.IsEnabled = Paginator.IsValidLeftMore;
+            Name_ButtonLeftMore.IsEnabled = pIsEnabled;
         }
 
-        private void DisableRight()
+        private void DisableRight(bool pIsEnabled)
         {
-            Name_ButtonRight.IsEnabled = Paginator.IsValidRight;
+            Name_ButtonRight.IsEnabled = pIsEnabled;
         }
 
-        private void DisableRightMore()
+        private void DisableRightMore(bool pIsEnabled)
         {
-            Name_ButtonRightMore.IsEnabled = Paginator.IsValidRightMore;
+            Name_ButtonRightMore.IsEnabled = pIsEnabled;
         }
 
         void InitPaginator()
         {
-            Paginator.DbData = MOCK_InitializeData();
-
-            var itemsPerPageList = MOCK_InitializeItemsPerPage();
-            var pagesToSkipList = MOCK_InitializeItemsPagesToSkip();
+            var DbData = MOCK_InitializeData();
+            var currentPage = new IntMore0Less65535Exclsv() { Value = 1 };
+            var itemsPerPageList = MOCK_InitializeItemsPerPage().ToArray();
+            var pagesToSkipList = MOCK_InitializeItemsPagesToSkip().ToArray();
+            var defauleSelectedIndex = 0;
 
             ComboBoxItemsPerPage.ItemsSource = itemsPerPageList;
-            ComboBoxItemsPerPage.SelectedIndex = 0;
-            Paginator.ItemsPerPage.Value = itemsPerPageList.First().Value;
+            ComboBoxItemsPerPage.SelectedIndex = defauleSelectedIndex;
 
             ComboBoxPagesToSkip.ItemsSource = pagesToSkipList;
-            ComboBoxPagesToSkip.SelectedIndex = 0;
-            Paginator.PagesToSkip.Value = pagesToSkipList.First().Value;
+            ComboBoxPagesToSkip.SelectedIndex = defauleSelectedIndex;
 
-            CurrentStatePaginator = PaginatorScope.Init()(Paginator, itemsPerPageList.First().Value, pagesToSkipList.First().Value);
+            PaginatorCurrentState = PaginatorScope.Init(
+                currentPage,
+                itemsPerPageList[defauleSelectedIndex],
+                pagesToSkipList[defauleSelectedIndex],
+                DbData
+                );
+
+            RenderPaginator(PaginatorCurrentState);
         }
 
         //  MOCK
@@ -73,15 +77,15 @@ namespace WpfAppFP
             return res;
         }
 
-        private IEnumerable<IntGreater0Less65535Exclusive> MOCK_InitializeItemsPerPage()
+        private IEnumerable<IntMore0Less65535Exclsv> MOCK_InitializeItemsPerPage()
         {
-            var res = Enumerable.Range(2, 10).Select(i => (IntGreater0Less65535Exclusive)i);
+            var res = Enumerable.Range(2, 10).Select(i => (IntMore0Less65535Exclsv)i);
             return res;
         }
 
-        private IEnumerable<IntGreater0Less65535Exclusive> MOCK_InitializeItemsPagesToSkip()
+        private IEnumerable<IntMore0Less65535Exclsv> MOCK_InitializeItemsPagesToSkip()
         {
-            var res = Enumerable.Range(2, 5).Select(i => (IntGreater0Less65535Exclusive)i);
+            var res = Enumerable.Range(2, 5).Select(i => (IntMore0Less65535Exclsv)i);
             return res;
         }
 
@@ -89,38 +93,37 @@ namespace WpfAppFP
         private void Button_Click_Left
             (object sender, RoutedEventArgs e)
         {
-
-            CurrentStatePaginator = CurrentStatePaginator.GoLeft<PaginatorState>();
-                UpdateUI(CurrentStatePaginator);
+            PaginatorCurrentState = PaginatorCurrentState.GoLeft();
+            RenderPaginator(PaginatorCurrentState);
         }
 
         private void Button_Click_LeftMore
             (object sender, RoutedEventArgs e)
         {
-            if (Paginator.IsValidLeftMore)
+            if (PaginatorCurrentState.IsValidLeftMore)
             {
-                Paginator = Paginator.GoLeftMore<PaginatorState>();
-                UpdateUI();
+                PaginatorCurrentState = PaginatorCurrentState.GoLeftMore();
+                RenderPaginator(PaginatorCurrentState);
             }
         }
 
         private void Button_Click_Right
             (object sender, RoutedEventArgs e)
         {
-            if (Paginator.IsValidRight)
+            if (PaginatorCurrentState.IsValidRight)
             {
-                Paginator = Paginator.GoRight<PaginatorState>();
-                UpdateUI();
+                PaginatorCurrentState = PaginatorCurrentState.GoRight();
+                RenderPaginator(PaginatorCurrentState);
             }
         }
 
         private void Button_Click_RightMore
             (object sender, RoutedEventArgs e)
         {
-            if (Paginator.IsValidRightMore)
+            if (PaginatorCurrentState.IsValidRightMore)
             {
-                Paginator = Paginator.GoRightMore<PaginatorState>();
-                UpdateUI();
+                PaginatorCurrentState = PaginatorCurrentState.GoRightMore();
+                RenderPaginator(PaginatorCurrentState);
             }
         }
 
@@ -137,16 +140,16 @@ namespace WpfAppFP
         }
 
         // Update UI
-        private void UpdateUI()
+        private void RenderPaginator(PaginatorState pPaginatorState)
         {
-            DisableElements();
-            UpdateUI_CurrentPageIs();
-            UpdateUI_SetDataToShow(Paginator.PagesToShow());
+            DisableElements(pPaginatorState);
+            UpdateUI_SetDataToShow(pPaginatorState.PagesToShow());
+            UpdateUI_CurrentPageIs(pPaginatorState);
         }
 
-        private void UpdateUI_CurrentPageIs()
+        private void UpdateUI_CurrentPageIs(PaginatorState pPaginatorState)
         {
-            Name_CurrentPageIs.Text = Paginator.CurrentPage.Value.ToString();
+            Name_CurrentPageIs.Text = pPaginatorState.CurrentPage.Value.ToString();
         }
 
         private void UpdateUI_SetDataToShow(IEnumerable<int> data)

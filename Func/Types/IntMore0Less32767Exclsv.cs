@@ -2,7 +2,7 @@
 
 namespace Func.Types
 {
-    public class IntGreater0Less32767Exclusive
+    public class IntMore0Less32767Exclsv
     {
         private short _value = 1;
         public short Value

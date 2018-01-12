@@ -8,9 +8,9 @@ namespace Func
     {
         public PaginatorState()
         {
-            CurrentPage = new IntGreater0Less65535Exclusive();
-            ItemsPerPage = new IntGreater0Less65535Exclusive();
-            PagesToSkip = new IntGreater0Less65535Exclusive();
+            CurrentPage = new IntMore0Less65535Exclsv();
+            ItemsPerPage = new IntMore0Less65535Exclsv();
+            PagesToSkip = new IntMore0Less65535Exclsv();
         }
 
         public PaginatorState(PaginatorState old)
@@ -36,9 +36,9 @@ namespace Func
         }
 
         public PaginatorState(
-            IntGreater0Less65535Exclusive pCurrentPage,
-            IntGreater0Less65535Exclusive pItemsPerPage,
-            IntGreater0Less65535Exclusive pPagesToSkip,
+            IntMore0Less65535Exclsv pCurrentPage,
+            IntMore0Less65535Exclsv pItemsPerPage,
+            IntMore0Less65535Exclsv pPagesToSkip,
 
             int pNumberOfPages,
             int pTotalNumberOfItemsInDB,
@@ -77,9 +77,9 @@ namespace Func
             PagesLeftMore = pPagesLeftMore;
         }
 
-        public IntGreater0Less65535Exclusive CurrentPage;
-        public IntGreater0Less65535Exclusive ItemsPerPage;
-        public IntGreater0Less65535Exclusive PagesToSkip;
+        public IntMore0Less65535Exclsv CurrentPage;
+        public IntMore0Less65535Exclsv ItemsPerPage;
+        public IntMore0Less65535Exclsv PagesToSkip;
 
         public int NumberOfPages;
         public int TotalNumberOfItemsInDB;

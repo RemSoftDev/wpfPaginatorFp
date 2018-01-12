@@ -2,7 +2,7 @@
 
 namespace Func.Types
 {
-    public class IntGreater0Less65535Exclusive
+    public class IntMore0Less65535Exclsv
     {
         private ushort _value = 1;
         public ushort Value
@@ -25,9 +25,9 @@ namespace Func.Types
             }
         }
 
-        public static explicit operator IntGreater0Less65535Exclusive(int v)
+        public static explicit operator IntMore0Less65535Exclsv(int v)
         {
-            return new IntGreater0Less65535Exclusive() { Value = Convert.ToUInt16(v) };
+            return new IntMore0Less65535Exclsv() { Value = Convert.ToUInt16(v) };
         }
     }
 }

@@ -7,51 +7,64 @@ namespace Func
 {
     public static class PaginatorScope
     {
-        public static Func<PaginatorState, PaginatorState>
-            NextState()
+        public static PaginatorState
+            Init(
+                IntMore0Less65535Exclsv pCurrentPage,
+                IntMore0Less65535Exclsv pItemsPerPage,
+                IntMore0Less65535Exclsv pPagesToSkip,
+                IEnumerable<int> pDbData
+                )
         {
-            return (paginatorState) =>
-            {
-                var res = paginatorState.
-                          PipeForward(GetTotalNumberOfItemsInDB()).
-                          PipeForward(GetNumberOfPages()).
-                          PipeForward(IsValidLeft()).
-                          PipeForward(IsValidLeftMore()).
-                          PipeForward(IsValidRight()).
-                          PipeForward(IsValidRightMore()).
-                          PipeForward(PagesToShow());
+            var res = new PaginatorState();
+            res.CurrentPage = pCurrentPage;
+            res.ItemsPerPage = pItemsPerPage;
+            res.PagesToSkip = pPagesToSkip;
+            res.DbData = pDbData;
 
-                return res;
-            };
+            return NextState(res);
+        }
+
+        private static PaginatorState
+            NextState(PaginatorState pPaginatorState)
+        {
+            var res = pPaginatorState.
+                      PipeForward(GetTotalNumberOfItemsInDB()).
+                      PipeForward(GetNumberOfPages()).
+                      PipeForward(IsValidLeft()).
+                      PipeForward(IsValidLeftMore()).
+                      PipeForward(IsValidRight()).
+                      PipeForward(IsValidRightMore()).
+                      PipeForward(PagesToShow());
+
+            return res;
         }
 
         public static PaginatorState
             GoRight(
             this PaginatorState paginatorState)
         {
-            return Init()(paginatorState.With(z => z.CurrentPage.Value++));
+            return NextState(paginatorState.With(z => z.CurrentPage.Value++));
         }
 
         public static PaginatorState
             GoLeft(
             this PaginatorState paginatorState)
         {
-            return Init()(paginatorState.With(z => z.CurrentPage.Value--));
+            return NextState(paginatorState.With(z => z.CurrentPage.Value--));
         }
 
         public static PaginatorState
             GoRightMore(
             this PaginatorState paginatorState)
         {
-            return Init()(paginatorState.With(z => z.CurrentPage.Value += paginatorState.PagesToSkip.Value));
+            return NextState(paginatorState.With(z => z.CurrentPage.Value += paginatorState.PagesToSkip.Value));
         }
 
         public static PaginatorState
-            GoLeftMore
-            <TRes>(
+            GoLeftMore(
             this PaginatorState paginatorState)
         {
-            return Init()(paginatorState.With(z => z.CurrentPage.Value -= paginatorState.PagesToSkip.Value));
+            return NextState(paginatorState.With(z => z.CurrentPage.Value -= paginatorState.PagesToSkip.Value));
         }
 
         public static Func<PaginatorState, PaginatorState>
@@ -71,8 +84,8 @@ namespace Func
 
         private static Func<PaginatorState, IEnumerable<int>>
             GetItemsToShow(
-            Func<IntGreater0Less65535Exclusive, IntGreater0Less65535Exclusive, uint> getStartIndex,
-            Func<IntGreater0Less65535Exclusive, IntGreater0Less65535Exclusive, uint> getEndIndex,
+            Func<IntMore0Less65535Exclsv, IntMore0Less65535Exclsv, uint> getStartIndex,
+            Func<IntMore0Less65535Exclsv, IntMore0Less65535Exclsv, uint> getEndIndex,
             Func<uint, uint, IEnumerable<int>, IEnumerable<int>> GetDataStartEndIndex
             )
         {
@@ -86,13 +99,13 @@ namespace Func
             };
         }
 
-        private static Func<IntGreater0Less65535Exclusive, IntGreater0Less65535Exclusive, uint>
+        private static Func<IntMore0Less65535Exclsv, IntMore0Less65535Exclsv, uint>
             GetLeftIndex() => (CurrentPage, ItemsPerPage) =>
                 {
                     return (uint)((CurrentPage.Value - 1) * ItemsPerPage.Value);
                 };
 
-        private static Func<IntGreater0Less65535Exclusive, IntGreater0Less65535Exclusive, uint>
+        private static Func<IntMore0Less65535Exclsv, IntMore0Less65535Exclsv, uint>
             RightIndex => (CurrentPage, ItemsPerPage) =>
                 {
                     return (uint)(CurrentPage.Value * ItemsPerPage.Value);
