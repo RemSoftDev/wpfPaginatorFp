@@ -67,13 +67,13 @@ namespace Func
             return NextState(paginatorState.With(z => z.CurrentPage.Value -= paginatorState.PagesToSkip.Value));
         }
 
-        public static Func<PaginatorState, PaginatorState>
+        private static Func<PaginatorState, PaginatorState>
             PagesToShow() => (paginatorState) =>
                 {
                     return paginatorState.With(z => z.PagesToShow = () => GetPages()(paginatorState));
                 };
 
-        public static Func<PaginatorState, IEnumerable<int>>
+        private static Func<PaginatorState, IEnumerable<int>>
             GetPages()
         {
             return GetItemsToShow(
