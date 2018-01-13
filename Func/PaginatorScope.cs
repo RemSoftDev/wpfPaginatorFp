@@ -140,7 +140,7 @@ namespace Func
         private static Func<PaginatorState, PaginatorState>
             IsValidLeftMore() => (paginatorState) =>
                  {
-                     return paginatorState.With(z => z.IsValidLeftMore = paginatorState.CurrentPage.Value - paginatorState.PagesToSkip.Value > 1);
+                     return paginatorState.With(z => z.IsValidLeftMore = paginatorState.CurrentPage.Value - paginatorState.PagesToSkip.Value > 0);
                  };
 
         private static Func<PaginatorState, PaginatorState>
