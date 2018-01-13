@@ -144,12 +144,12 @@ namespace WpfAppFP
         {
             DisableElements(pPaginatorState);
             UpdateUI_SetDataToShow(pPaginatorState.PagesToShow());
-            UpdateUI_CurrentPageIs(pPaginatorState);
+            UpdateUI_CurrentPageIs(pPaginatorState.CurrentPage);
         }
 
-        private void UpdateUI_CurrentPageIs(PaginatorState pPaginatorState)
+        private void UpdateUI_CurrentPageIs(IntMore0Less65535Exclsv pCurrentPage)
         {
-            Name_CurrentPageIs.Text = pPaginatorState.CurrentPage.Value.ToString();
+            Name_CurrentPageIs.Text = pCurrentPage.Value.ToString();
         }
 
         private void UpdateUI_SetDataToShow(IEnumerable<int> data)

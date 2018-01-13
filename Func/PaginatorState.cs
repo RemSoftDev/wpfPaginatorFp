@@ -78,7 +78,7 @@ namespace Func
             PagesLeftMore = pPagesLeftMore;
         }
 
-        public IntMore0Less65535Exclsv _CurrentPage;
+        private IntMore0Less65535Exclsv _CurrentPage;
         public IntMore0Less65535Exclsv CurrentPage
         {
             get
