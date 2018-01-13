@@ -120,8 +120,7 @@ namespace Func
         private static Func<PaginatorState, PaginatorState>
             GetTotalNumberOfItemsInDB() => (paginatorState) =>
                 {
-                    paginatorState.TotalNumberOfItemsInDB = paginatorState.DbData.Count();
-                    return new PaginatorState(paginatorState);
+                    return paginatorState.With(z => z.TotalNumberOfItemsInDB = paginatorState.DbData.Count());
                 };
 
         private static Func<PaginatorState, PaginatorState>
