@@ -121,7 +121,7 @@ namespace Func
             GetTotalNumberOfItemsInDB() => (paginatorState) =>
                 {
                     return paginatorState.With(z => z.TotalNumberOfItemsInDB = paginatorState.DbData.Count());
-                };
+                }; 
 
         private static Func<PaginatorState, PaginatorState>
             GetNumberOfPages() => (paginatorState) =>
