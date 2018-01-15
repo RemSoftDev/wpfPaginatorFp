@@ -877,7 +877,7 @@ module DefiningClasses =
     
     /// This is how you instantiate the Vector2D class.
     let vector1 = Vector2D(3.0, 4.0)
-
+    
     /// Get a new scaled vector object, without modifying the original object.
     let vector2 = vector1.Scale(10.0)
 
