@@ -100,31 +100,22 @@ namespace WpfAppFP
         private void Button_Click_LeftMore
             (object sender, RoutedEventArgs e)
         {
-            if (PaginatorCurrentState.IsValidLeftMore)
-            {
-                PaginatorCurrentState = PaginatorCurrentState.GoLeftMore();
-                RenderPaginator(PaginatorCurrentState);
-            }
+            PaginatorCurrentState = PaginatorCurrentState.GoLeftMore();
+            RenderPaginator(PaginatorCurrentState);
         }
 
         private void Button_Click_Right
             (object sender, RoutedEventArgs e)
         {
-            if (PaginatorCurrentState.IsValidRight)
-            {
-                PaginatorCurrentState = PaginatorCurrentState.GoRight();
-                RenderPaginator(PaginatorCurrentState);
-            }
+            PaginatorCurrentState = PaginatorCurrentState.GoRight();
+            RenderPaginator(PaginatorCurrentState);
         }
 
         private void Button_Click_RightMore
             (object sender, RoutedEventArgs e)
         {
-            if (PaginatorCurrentState.IsValidRightMore)
-            {
-                PaginatorCurrentState = PaginatorCurrentState.GoRightMore();
-                RenderPaginator(PaginatorCurrentState);
-            }
+            PaginatorCurrentState = PaginatorCurrentState.GoRightMore();
+            RenderPaginator(PaginatorCurrentState);
         }
 
         private void ComboBoxPagesToSkip_SelectionChanged

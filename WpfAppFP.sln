@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfAppFP", "WpfAppFP\WpfApp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Func", "Func\Func.csproj", "{361D4E0A-95FE-41EF-98C5-44062DDE5FCC}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Tutorial", "Tutorial\Tutorial.fsproj", "{D928E50D-86F6-444B-BAE0-FE6A0B78C552}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Paginator", "Paginator\Paginator.fsproj", "{FE2EC13E-44C8-4B75-8340-73D6D12ED577}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{361D4E0A-95FE-41EF-98C5-44062DDE5FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{361D4E0A-95FE-41EF-98C5-44062DDE5FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{361D4E0A-95FE-41EF-98C5-44062DDE5FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D928E50D-86F6-444B-BAE0-FE6A0B78C552}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D928E50D-86F6-444B-BAE0-FE6A0B78C552}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D928E50D-86F6-444B-BAE0-FE6A0B78C552}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D928E50D-86F6-444B-BAE0-FE6A0B78C552}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE2EC13E-44C8-4B75-8340-73D6D12ED577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE2EC13E-44C8-4B75-8340-73D6D12ED577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE2EC13E-44C8-4B75-8340-73D6D12ED577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE2EC13E-44C8-4B75-8340-73D6D12ED577}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
