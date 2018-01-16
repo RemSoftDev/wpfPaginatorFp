@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using static Paginator.CustomTypes;
 
 namespace WpfAppFP
 {
@@ -15,10 +16,10 @@ namespace WpfAppFP
             InitPaginator();
         }
 
-        private CustomTypes.PaginatorState PaginatorCurrentState;
+        private PaginatorState PaginatorCurrentState;
 
         // Initialisations
-        private void DisableElements(CustomTypes.PaginatorState pPaginatorState)
+        private void DisableElements(PaginatorState pPaginatorState)
         {
             DisableLeft(pPaginatorState.IsValidLeft);
             DisableLeftMore(pPaginatorState.IsValidLeftMore);
@@ -49,7 +50,7 @@ namespace WpfAppFP
         void InitPaginator()
         {
             var DbData = MOCK_InitializeData();
-            var currentPage = new CustomTypes.IntMore0Less65535Exclsv(1);
+            var currentPage = new IntMore0Less65535Exclsv(1);
             var itemsPerPageList = MOCK_InitializeItemsPerPage().ToArray();
             var pagesToSkipList = MOCK_InitializeItemsPagesToSkip().ToArray();
             var defauleSelectedIndex = 0;
@@ -60,6 +61,7 @@ namespace WpfAppFP
             ComboBoxPagesToSkip.ItemsSource = pagesToSkipList;
             ComboBoxPagesToSkip.SelectedIndex = defauleSelectedIndex;
             FSharpList<int> niceSharpList = ListModule.OfSeq(DbData);
+
             PaginatorCurrentState = PaginatorScope.Init(
                 currentPage,
                 itemsPerPageList[defauleSelectedIndex],
@@ -77,15 +79,15 @@ namespace WpfAppFP
             return res;
         }
 
-        private IEnumerable<CustomTypes.IntMore0Less65535Exclsv> MOCK_InitializeItemsPerPage()
+        private IEnumerable<IntMore0Less65535Exclsv> MOCK_InitializeItemsPerPage()
         {
-            var res = Enumerable.Range(2, 10).Select(i => (CustomTypes.IntMore0Less65535Exclsv)i);
+            var res = Enumerable.Range(2, 10).Select(i => (IntMore0Less65535Exclsv)i);
             return res;
         }
 
-        private IEnumerable<CustomTypes.IntMore0Less65535Exclsv> MOCK_InitializeItemsPagesToSkip()
+        private IEnumerable<IntMore0Less65535Exclsv> MOCK_InitializeItemsPagesToSkip()
         {
-            var res = Enumerable.Range(2, 5).Select(i => (CustomTypes.IntMore0Less65535Exclsv)i);
+            var res = Enumerable.Range(2, 5).Select(i => (IntMore0Less65535Exclsv)i);
             return res;
         }
 
@@ -131,14 +133,14 @@ namespace WpfAppFP
         }
 
         // Update UI
-        private void RenderPaginator(CustomTypes.PaginatorState pPaginatorState)
+        private void RenderPaginator(PaginatorState pPaginatorState)
         {
             DisableElements(pPaginatorState);
             //UpdateUI_SetDataToShow(pPaginatorState.PagesToShow());
             UpdateUI_CurrentPageIs(pPaginatorState.CurrentPage);
         }
 
-        private void UpdateUI_CurrentPageIs(CustomTypes.IntMore0Less65535Exclsv pCurrentPage)
+        private void UpdateUI_CurrentPageIs(IntMore0Less65535Exclsv pCurrentPage)
         {
             Name_CurrentPageIs.Text = pCurrentPage.Value.ToString();
         }
