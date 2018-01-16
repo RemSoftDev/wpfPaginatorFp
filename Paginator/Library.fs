@@ -10,7 +10,9 @@ module CustomTypes =
         member this.Value = IsValid pValue
         static member op_Explicit(source: int) =
             IntMore0Less65535Exclsv(source)
-         
+
+    type Person = {lat:int; long:int}
+
     type PaginatorState = 
          {NumberOfPages : IntMore0Less65535Exclsv
           CurrentPage   : IntMore0Less65535Exclsv
@@ -52,5 +54,34 @@ module PaginatorScope =
 
           PagesToShow ="2" }
     
-    let private _NextState (pPaginatorState : PaginatorState) =
-        pPaginatorState
+    let private _GetTotalNumberOfItemsInDB pState = 
+        {pState with TotalNumberOfItemsInDB = pState.DbData.Length}
+
+    let private _GetNumberOfPages pState = 
+        {pState with TotalNumberOfItemsInDB = pState.DbData.Length}
+
+    let private _IsValidLeft pState = 
+        {pState with IsValidLeft = pState.CurrentPage.Value > 1}
+
+    let private _IsValidLeftMore pState = 
+        {pState with IsValidLeftMore = pState.CurrentPage.Value - pState.PagesToSkip.Value > 0}
+
+    let private _IsValidRight pState = 
+        {pState with IsValidRight = pState.CurrentPage.Value < pState.NumberOfPages.Value}
+
+    let private _IsValidRightMore pState = 
+        {pState with IsValidRightMore = pState.CurrentPage.Value + pState.PagesToSkip.Value < pState.NumberOfPages.Value}
+
+    let  NextState pState =
+         pState
+         |> _GetTotalNumberOfItemsInDB  
+         |> _GetNumberOfPages  
+         |> _IsValidLeft  
+         |> _IsValidLeftMore  
+         |> _IsValidRight  
+         |> _IsValidRightMore  
+
+    let sdf = Init( IntMore0Less65535Exclsv 1,  IntMore0Less65535Exclsv 2, IntMore0Less65535Exclsv 3, [0..110])
+    let sdfa = sdf|>NextState
+    let vc = sdfa.NumberOfPages.Value
+    
