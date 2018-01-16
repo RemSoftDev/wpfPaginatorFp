@@ -254,7 +254,7 @@ module PipelinesAndComposition =
         let squares = List.map square odds
         let result = List.map addOne squares
         result
-
+        
     printfn "processing %A through 'squareOddValuesAndAddOne' produces: %A" numbers (squareOddValuesAndAddOne numbers)
     
     /// A shorter way to write 'squareOddValuesAndAddOne' is to nest each
