@@ -12,7 +12,7 @@ module CustomTypes =
             IntMore0Less65535Exclsv(source)
          
     type PaginatorState = 
-        { NumberOfPages : IntMore0Less65535Exclsv
+         {NumberOfPages : IntMore0Less65535Exclsv
           CurrentPage   : IntMore0Less65535Exclsv
           ItemsPerPage  : IntMore0Less65535Exclsv
           PagesToSkip   : IntMore0Less65535Exclsv
@@ -24,31 +24,34 @@ module CustomTypes =
           IsValidRight     : bool
           IsValidRightMore : bool
 
-          DbData : string
+          DbData : List<int>
 
           PagesToShow : string }
 
 open CustomTypes
               
 module PaginatorScope =
-    let Init (pCurrentPage:IntMore0Less65535Exclsv, 
+    let Init (pCurrentPage     : IntMore0Less65535Exclsv, 
               pItemsPerPageList: IntMore0Less65535Exclsv, 
-              pPagesToSkipList: IntMore0Less65535Exclsv, 
-              pDbData: string) =
-         {NumberOfPages = IntMore0Less65535Exclsv(1)
-          CurrentPage    = IntMore0Less65535Exclsv(1)
-          ItemsPerPage   = IntMore0Less65535Exclsv(1)
-          PagesToSkip    = IntMore0Less65535Exclsv(1)
+              pPagesToSkipList : IntMore0Less65535Exclsv, 
+              pDbData          : List<int>) =
 
-          TotalNumberOfItemsInDB =1
+         {NumberOfPages  = IntMore0Less65535Exclsv(1)
+          CurrentPage    = pCurrentPage
+          ItemsPerPage   = pItemsPerPageList
+          PagesToSkip    = pPagesToSkipList
+
+          TotalNumberOfItemsInDB = 1
 
           IsValidLeft      = false
           IsValidLeftMore  = false
           IsValidRight     = false
           IsValidRightMore = false
 
-          DbData ="1"
+          DbData = pDbData
 
           PagesToShow ="2" }
     
+    let private _NextState (pPaginatorState : PaginatorState) =
+        pPaginatorState
 
