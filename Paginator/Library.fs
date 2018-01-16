@@ -1,4 +1,4 @@
-﻿namespace Paginator
+namespace Paginator
 
 module CustomTypes = 
     type IntMore0Less65535Exclsv(pValue) = 
@@ -54,4 +54,3 @@ module PaginatorScope =
     
     let private _NextState (pPaginatorState : PaginatorState) =
         pPaginatorState
-
