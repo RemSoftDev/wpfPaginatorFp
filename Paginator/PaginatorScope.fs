@@ -77,12 +77,12 @@ module PaginatorScope =
 
     let init totalItems itemsPerPage = { TotalItems = totalItems; ItemsPerPage = itemsPerPage; CurrentIndex = 0us; }
 
-    let nextPage state = 
-      if state.CurrentIndex + state.ItemsPerPage = state.TotalItems 
-      then state
-      else { state with CurrentIndex = state.CurrentIndex + state.ItemsPerPage }
+    let nextPage state =
+        if state.CurrentIndex + state.ItemsPerPage = state.TotalItems 
+        then state
+        else { state with CurrentIndex = state.CurrentIndex + state.ItemsPerPage }
   
-    let goRight ((count, perPage), (currentPage, (currentItems : int list))) = 
+    let goRight ((count, perPage), (currentPage, (currentItems : int list))) =
         let nextItemIndex = currentPage * perPage - 1
         ((count, perPage), (currentPage + 1, (if count = currentItems.[perPage - 1] then failwith "Error!" else [nextItemIndex..(nextItemIndex + perPage - 1)])))
 
