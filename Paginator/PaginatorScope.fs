@@ -74,7 +74,9 @@ module PaginatorScope =
             NextState {this with CurrentPage = IntMore0Less65535Exclsv (this.CurrentPage.Value + 1us)}
 
     type state = { TotalItems : uint16; ItemsPerPage : uint16; CurrentIndex : uint16; }
+
     let init totalItems itemsPerPage = { TotalItems = totalItems; ItemsPerPage = itemsPerPage; CurrentIndex = 0us; }
+
     let nextPage state = 
       if state.CurrentIndex + state.ItemsPerPage = state.TotalItems 
       then state
@@ -87,4 +89,9 @@ module PaginatorScope =
     init 10us 2us 
     |> nextPage
     |> nextPage
+    |> printf "%A"
+
+    ((10, 2), (1, [0;1]))
+    |> goRight
+    |> goRight
     |> printf "%A"
