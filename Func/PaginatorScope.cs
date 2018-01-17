@@ -84,31 +84,31 @@ namespace Func
 
         private static Func<PaginatorState, IEnumerable<int>>
             GetItemsToShow(
-            Func<IntMore0Less65535Exclsv, IntMore0Less65535Exclsv, uint> getStartIndex,
-            Func<IntMore0Less65535Exclsv, IntMore0Less65535Exclsv, uint> getEndIndex,
+            Func<PaginatorState, uint> getStartIndex,
+            Func<PaginatorState, uint> getEndIndex,
             Func<uint, uint, IEnumerable<int>, IEnumerable<int>> GetDataStartEndIndex
             )
         {
             return (paginatorState) =>
             {
                 // how to handle the error (currentPage < 1) ???  //some Options !!!
-                var startIndex = getStartIndex.Curry(paginatorState.CurrentPage)(paginatorState.ItemsPerPage);
-                var endIndex = getEndIndex.Curry(paginatorState.CurrentPage)(paginatorState.ItemsPerPage);
+                var startIndex = getStartIndex(paginatorState);
+                var endIndex = getEndIndex(paginatorState);
 
                 return GetDataStartEndIndex(startIndex, endIndex, paginatorState.DbData);
             };
         }
 
-        private static Func<IntMore0Less65535Exclsv, IntMore0Less65535Exclsv, uint>
-            GetLeftIndex() => (CurrentPage, ItemsPerPage) =>
+        private static Func<PaginatorState, uint>
+            GetLeftIndex() => (paginatorState) =>
                 {
-                    return (uint)((CurrentPage.Value - 1) * ItemsPerPage.Value);
+                    return (uint)((paginatorState.CurrentPage.Value - 1) * paginatorState.ItemsPerPage.Value);
                 };
 
-        private static Func<IntMore0Less65535Exclsv, IntMore0Less65535Exclsv, uint>
-            RightIndex => (CurrentPage, ItemsPerPage) =>
+        private static Func<PaginatorState, uint>
+            RightIndex => (paginatorState) =>
                 {
-                    return (uint)(CurrentPage.Value * ItemsPerPage.Value);
+                    return (uint)(paginatorState.CurrentPage.Value * paginatorState.ItemsPerPage.Value);
                 };
 
         private static Func<uint, uint, IEnumerable<int>, IEnumerable<int>>

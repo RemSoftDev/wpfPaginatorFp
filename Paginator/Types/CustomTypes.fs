@@ -1,14 +1,16 @@
 ﻿[<AutoOpen>]
 module Paginator.Types.CustomTypes
     type IntMore0Less65535Exclsv(pValue) = 
-        let IsValid x  =
-              if x > 0 
+        let IsValid x =
+              if x > 0us
               then x
               else failwith "Out of range"
 
         member this.Value = IsValid pValue
-        static member op_Explicit(source: int) =
-            IntMore0Less65535Exclsv(source)
+        static member op_Explicit(source) =
+            IntMore0Less65535Exclsv(uint16 source)
+        
+        new(pValue) = IntMore0Less65535Exclsv(uint16 pValue)
 
     type PaginatorState = 
          {NumberOfPages : IntMore0Less65535Exclsv

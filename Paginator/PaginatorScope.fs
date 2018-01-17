@@ -29,20 +29,29 @@ module PaginatorScope =
         {pState with TotalNumberOfItemsInDB = pState.DbData.Length}
 
     let private _GetNumberOfPages pState =
-        let divide = System.Math.Round((pState.TotalNumberOfItemsInDB/pState.ItemsPerPage.Value) |> double, MidpointRounding.AwayFromZero) |> int;
+        let divide = System.Math.Round( double pState.TotalNumberOfItemsInDB/double pState.ItemsPerPage.Value, MidpointRounding.AwayFromZero) |> uint16;
         {pState with NumberOfPages = IntMore0Less65535Exclsv divide}
 
     let private _IsValidLeft pState = 
-        {pState with IsValidLeft = pState.CurrentPage.Value > 1}
+        {pState with IsValidLeft = pState.CurrentPage.Value > 1us}
 
     let private _IsValidLeftMore pState = 
-        {pState with IsValidLeftMore = pState.CurrentPage.Value - pState.PagesToSkip.Value > 0}
+        {pState with IsValidLeftMore = pState.CurrentPage.Value - pState.PagesToSkip.Value > 0us}
 
     let private _IsValidRight pState = 
         {pState with IsValidRight = pState.CurrentPage.Value < pState.NumberOfPages.Value}
 
     let private _IsValidRightMore pState = 
         {pState with IsValidRightMore = pState.CurrentPage.Value + pState.PagesToSkip.Value < pState.NumberOfPages.Value}
+
+    let private GetLeftIndex pState = 
+        ((pState.CurrentPage.Value - 1us) * pState.ItemsPerPage.Value) |> uint32
+
+    let private GetRightIndex pState = 
+        {pState with IsValidLeft = pState.CurrentPage.Value > 1us}
+
+    let private GetDataStartEndIndex pState = 
+        {pState with IsValidLeft = pState.CurrentPage.Value > 1us}
 
     let  NextState pState =
          pState
