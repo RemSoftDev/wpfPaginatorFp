@@ -7,27 +7,22 @@ module PaginatorScope =
     let Init (pCurrentPage     : IntMore0Less65535Exclsv, 
               pItemsPerPageList: IntMore0Less65535Exclsv, 
               pPagesToSkipList : IntMore0Less65535Exclsv, 
-              pDbData          : List<int>) =
+              pTotalNumberOfItemsInDB : int) =
 
          {NumberOfPages  = IntMore0Less65535Exclsv(1)
           CurrentPage    = pCurrentPage
           ItemsPerPage   = pItemsPerPageList
           PagesToSkip    = pPagesToSkipList
 
-          TotalNumberOfItemsInDB = 1
+          TotalNumberOfItemsInDB = pTotalNumberOfItemsInDB
+          LeftIndex = 1u
+          RightIndex = uint32 pItemsPerPageList.Value
 
           IsValidLeft      = false
           IsValidLeftMore  = false
           IsValidRight     = false
-          IsValidRightMore = false
-
-          DbData = pDbData
-
-          PagesToShow ="1" }
+          IsValidRightMore = false}
     
-    let private _GetTotalNumberOfItemsInDB pState = 
-        {pState with TotalNumberOfItemsInDB = pState.DbData.Length}
-
     let private _GetNumberOfPages pState =
         let divide = System.Math.Round( double pState.TotalNumberOfItemsInDB/double pState.ItemsPerPage.Value, MidpointRounding.AwayFromZero) |> uint16;
         {pState with NumberOfPages = IntMore0Less65535Exclsv divide}
@@ -45,20 +40,20 @@ module PaginatorScope =
         {pState with IsValidRightMore = pState.CurrentPage.Value + pState.PagesToSkip.Value < pState.NumberOfPages.Value}
 
     let private GetLeftIndex pState = 
-        ((pState.CurrentPage.Value - 1us) * pState.ItemsPerPage.Value) |> uint32
+        let tmp = uint32 ((pState.CurrentPage.Value - 1us) * pState.ItemsPerPage.Value) 
+        {pState with LeftIndex = tmp}
 
     let private GetRightIndex pState = 
-        {pState with IsValidLeft = pState.CurrentPage.Value > 1us}
-
-    let private GetDataStartEndIndex pState = 
-        {pState with IsValidLeft = pState.CurrentPage.Value > 1us}
+        let tmp = uint32 (pState.CurrentPage.Value * pState.ItemsPerPage.Value)
+        {pState with RightIndex = tmp }
 
     let  NextState pState =
          pState
-         |> _GetTotalNumberOfItemsInDB  
          |> _GetNumberOfPages  
          |> _IsValidLeft  
          |> _IsValidLeftMore  
          |> _IsValidRight  
-         |> _IsValidRightMore  
+         |> _IsValidRightMore
+         |> GetLeftIndex
+         |> GetRightIndex
     

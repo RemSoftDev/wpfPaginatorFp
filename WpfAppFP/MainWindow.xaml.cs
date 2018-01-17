@@ -66,7 +66,7 @@ namespace WpfAppFP
                 currentPage,
                 itemsPerPageList[defauleSelectedIndex],
                 pagesToSkipList[defauleSelectedIndex],
-                niceSharpList
+                DbData.Count
                 );
 
             RenderPaginator(PaginatorCurrentState);

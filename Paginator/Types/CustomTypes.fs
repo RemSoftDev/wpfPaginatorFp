@@ -19,12 +19,10 @@ module Paginator.Types.CustomTypes
           PagesToSkip   : IntMore0Less65535Exclsv
 
           TotalNumberOfItemsInDB : int
+          LeftIndex              : uint32
+          RightIndex             : uint32
 
           IsValidLeft      : bool
           IsValidLeftMore  : bool
           IsValidRight     : bool
-          IsValidRightMore : bool
-
-          DbData : List<int>
-
-          PagesToShow : string }
+          IsValidRightMore : bool}
