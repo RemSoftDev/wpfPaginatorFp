@@ -4,8 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="Library.fs" />
+  <ItemGroup> 
+    <Compile Include="Types\CustomTypes.fs" />
+	<Compile Include="PaginatorScope.fs" />
   </ItemGroup>
 
 </Project>

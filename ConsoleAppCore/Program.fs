@@ -2,7 +2,7 @@
 
 open System
 open Paginator.PaginatorScope
-open Paginator.CustomTypes
+open Paginator.Types
 
 [<EntryPoint>]
 let main argv =

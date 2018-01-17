@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using static Paginator.CustomTypes;
+using static Paginator.Types.CustomTypes;
 
 namespace WpfAppFP
 {

@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Tutorial.fsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Paginator\Paginator.fsproj" />
   </ItemGroup>
 
