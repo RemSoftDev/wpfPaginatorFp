@@ -10,3 +10,5 @@
 /packages
 /UWP/bin
 /UWP/obj
+/ConsoleAppCore/obj
+/ConsoleAppCore/bin
