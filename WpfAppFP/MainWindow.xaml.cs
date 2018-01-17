@@ -95,7 +95,7 @@ namespace WpfAppFP
         private void Button_Click_Left
             (object sender, RoutedEventArgs e)
         {
-            // PaginatorCurrentState = PaginatorCurrentState.GoLeft();
+            //PaginatorCurrentState = PaginatorCurrentState.GoRight();
             RenderPaginator(PaginatorCurrentState);
         }
 
