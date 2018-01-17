@@ -33,6 +33,8 @@ module CustomTypes =
 open CustomTypes
               
 module PaginatorScope =
+    open System
+
     let Init (pCurrentPage     : IntMore0Less65535Exclsv, 
               pItemsPerPageList: IntMore0Less65535Exclsv, 
               pPagesToSkipList : IntMore0Less65535Exclsv, 
@@ -57,8 +59,9 @@ module PaginatorScope =
     let private _GetTotalNumberOfItemsInDB pState = 
         {pState with TotalNumberOfItemsInDB = pState.DbData.Length}
 
-    let private _GetNumberOfPages pState = 
-        {pState with TotalNumberOfItemsInDB = pState.DbData.Length}
+    let private _GetNumberOfPages pState =
+        let divide = System.Math.Round((pState.TotalNumberOfItemsInDB/pState.ItemsPerPage.Value) |> double, MidpointRounding.AwayFromZero) |> int;
+        {pState with NumberOfPages = IntMore0Less65535Exclsv divide}
 
     let private _IsValidLeft pState = 
         {pState with IsValidLeft = pState.CurrentPage.Value > 1}
@@ -80,8 +83,4 @@ module PaginatorScope =
          |> _IsValidLeftMore  
          |> _IsValidRight  
          |> _IsValidRightMore  
-
-    let sdf = Init( IntMore0Less65535Exclsv 1,  IntMore0Less65535Exclsv 2, IntMore0Less65535Exclsv 3, [0..110])
-    let sdfa = sdf|>NextState
-    let vc = sdfa.NumberOfPages.Value
     
