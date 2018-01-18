@@ -3,8 +3,9 @@ using Paginator;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Controls; 
 using static Paginator.Types.CustomTypes;
+using static Paginator.PaginatorScope;
 
 namespace WpfAppFP
 {
@@ -46,10 +47,12 @@ namespace WpfAppFP
         {
             Name_ButtonRightMore.IsEnabled = pIsEnabled;
         }
+        List<int> DbData = null;
 
         void InitPaginator()
         {
-            var DbData = MOCK_InitializeData();
+            var dbData = MOCK_InitializeData();
+            DbData = dbData;
             var currentPage = new IntMore0Less65535Exclsv(1);
             var itemsPerPageList = MOCK_InitializeItemsPerPage().ToArray();
             var pagesToSkipList = MOCK_InitializeItemsPagesToSkip().ToArray();
@@ -60,9 +63,9 @@ namespace WpfAppFP
 
             ComboBoxPagesToSkip.ItemsSource = pagesToSkipList;
             ComboBoxPagesToSkip.SelectedIndex = defauleSelectedIndex;
-            FSharpList<int> niceSharpList = ListModule.OfSeq(DbData);
+            FSharpList<int> niceSharpList = ListModule.OfSeq(dbData);
 
-            PaginatorCurrentState = PaginatorScope.Init(
+            PaginatorCurrentState = Init(
                 currentPage,
                 itemsPerPageList[defauleSelectedIndex],
                 pagesToSkipList[defauleSelectedIndex],
@@ -96,6 +99,7 @@ namespace WpfAppFP
             (object sender, RoutedEventArgs e)
         {
             //PaginatorCurrentState = PaginatorCurrentState.GoRight();
+            PaginatorCurrentState = GoLeft(PaginatorCurrentState);
             RenderPaginator(PaginatorCurrentState);
         }
 
@@ -103,6 +107,7 @@ namespace WpfAppFP
             (object sender, RoutedEventArgs e)
         {
             // PaginatorCurrentState = PaginatorCurrentState.GoLeftMore();
+            PaginatorCurrentState = GoLeftMore(PaginatorCurrentState);
             RenderPaginator(PaginatorCurrentState);
         }
 
@@ -110,6 +115,7 @@ namespace WpfAppFP
             (object sender, RoutedEventArgs e)
         {
             // PaginatorCurrentState = PaginatorCurrentState.GoRight();
+            PaginatorCurrentState = GoRight(PaginatorCurrentState);
             RenderPaginator(PaginatorCurrentState);
         }
 
@@ -117,6 +123,7 @@ namespace WpfAppFP
             (object sender, RoutedEventArgs e)
         {
             //PaginatorCurrentState = PaginatorCurrentState.GoRightMore();
+            PaginatorCurrentState = GoRightMore(PaginatorCurrentState);
             RenderPaginator(PaginatorCurrentState);
         }
 
@@ -136,7 +143,7 @@ namespace WpfAppFP
         private void RenderPaginator(PaginatorState pPaginatorState)
         {
             DisableElements(pPaginatorState);
-            //UpdateUI_SetDataToShow(pPaginatorState.PagesToShow());
+            UpdateUI_SetDataToShow(Func.PaginatorScope.GetDataStartEndIndex1(pPaginatorState.LeftIndexInclsv, pPaginatorState.RightIndexInclsv, DbData));
             UpdateUI_CurrentPageIs(pPaginatorState.CurrentPage);
         }
 

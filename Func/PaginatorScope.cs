@@ -111,17 +111,25 @@ namespace Func
                     return (uint)(paginatorState.CurrentPage.Value * paginatorState.ItemsPerPage.Value);
                 };
 
-        private static Func<uint, uint, IEnumerable<int>, IEnumerable<int>>
+        public static Func<uint, uint, IEnumerable<int>, IEnumerable<int>>
             GetDataStartEndIndex() => (startIndex, endIndex, DbData) =>
                 {
                     return DbData.Where(z => z > startIndex && z <= endIndex);
                 };
 
+        public static IEnumerable<int> GetDataStartEndIndex1(
+            uint startIndexInclsv, 
+            uint endIndexInclsv, 
+            IEnumerable<int> DbData)
+        {
+            return DbData.Where(z => z >= startIndexInclsv && z <= endIndexInclsv);
+        }
+
         private static Func<PaginatorState, PaginatorState>
             GetTotalNumberOfItemsInDB() => (paginatorState) =>
                 {
                     return paginatorState.With(z => z.TotalNumberOfItemsInDB = paginatorState.DbData.Count());
-                }; 
+                };
 
         private static Func<PaginatorState, PaginatorState>
             GetNumberOfPages() => (paginatorState) =>
