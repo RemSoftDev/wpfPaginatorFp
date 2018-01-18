@@ -27,8 +27,6 @@ namespace Func
             IsValidRight = old.IsValidRight;
             IsValidRightMore = old.IsValidRightMore;
 
-            DbData = old.DbData;
-
             PagesToShow = old.PagesToShow;
             PagesRight = old.PagesRight;
             PagesRightMore = old.PagesRightMore;

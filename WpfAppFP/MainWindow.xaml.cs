@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls; 
 using static Paginator.Types.CustomTypes;
 using static Paginator.PaginatorScope;
+using WpfAppFP.DB;
 
 namespace WpfAppFP
 {
@@ -47,6 +48,7 @@ namespace WpfAppFP
         {
             Name_ButtonRightMore.IsEnabled = pIsEnabled;
         }
+
         List<int> DbData = null;
 
         void InitPaginator()
@@ -69,7 +71,7 @@ namespace WpfAppFP
                 currentPage,
                 itemsPerPageList[defauleSelectedIndex],
                 pagesToSkipList[defauleSelectedIndex],
-                DbData.Count
+                Context.GetTotalNumberOfItemsInDB(dbData)
                 );
 
             RenderPaginator(PaginatorCurrentState);
@@ -143,7 +145,7 @@ namespace WpfAppFP
         private void RenderPaginator(PaginatorState pPaginatorState)
         {
             DisableElements(pPaginatorState);
-            UpdateUI_SetDataToShow(Func.PaginatorScope.GetDataStartEndIndex1(pPaginatorState.LeftIndexInclsv, pPaginatorState.RightIndexInclsv, DbData));
+            UpdateUI_SetDataToShow(Context.GetDataStartEndIndex(pPaginatorState.LeftIndexInclsv, pPaginatorState.RightIndexInclsv, DbData));
             UpdateUI_CurrentPageIs(pPaginatorState.CurrentPage);
         }
 
