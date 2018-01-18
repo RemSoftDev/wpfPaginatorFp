@@ -9,6 +9,13 @@ let main argv =
     printfn "Hello World from F#!"
     let sdf = Init (IntMore0Less65535Exclsv 1)  (IntMore0Less65535Exclsv 10) (IntMore0Less65535Exclsv 2) 100
     let sdfa = sdf|>GoRight
-    let vc = sdfa.NumberOfPages.Value
-    let zz = 1-2 > 0
+
+    let rangeTest testValue mid size =
+        match testValue with
+        | var1 when var1 >= mid - size/2 && var1 <= mid + size/2 -> printfn "The test value is in range. %d" var1
+        | _ -> printfn "The test value is out of range."
+
+    rangeTest 10 20 5
+    rangeTest 11 20 10
+    rangeTest 12 20 40
     0 // return an integer exit code

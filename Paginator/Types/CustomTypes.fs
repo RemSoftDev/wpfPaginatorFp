@@ -5,9 +5,9 @@ module Paginator.Types.CustomTypes
               if x > 0us
               then x
               else failwith "Out of range"
-
+        
         member this.Value = IsValid pValue
-        static member op_Explicit(source) =
+        static member op_Explicit source =
             IntMore0Less65535Exclsv(uint16 source)
         
         new(pValue) = IntMore0Less65535Exclsv(uint16 pValue)
@@ -18,7 +18,7 @@ module Paginator.Types.CustomTypes
           ItemsPerPage  : IntMore0Less65535Exclsv
           PagesToSkip   : IntMore0Less65535Exclsv
 
-          TotalNumberOfItemsInDB : int
+          TotalNumberOfItemsInDB : uint32
           LeftIndexInclsv        : uint32
           RightIndexInclsv       : uint32
 
