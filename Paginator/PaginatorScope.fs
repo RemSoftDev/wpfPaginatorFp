@@ -32,6 +32,10 @@ module PaginatorScope =
         let tmp = (pState.CurrentPage.Value * pState.ItemsPerPage.Value  - 1us) |> uint32
         {pState with RightIndexInclsv  = tmp }
     
+    let private GetPagesToSkipMax pState = 
+        let tmp = IntMore0Less65535Exclsv (pState.TotalNumberOfItemsInDB/2u)
+        {pState with  PagesToSkipMax = tmp}
+
     let private IsValidItemsPerPage pState = 
         if uint32 pState.ItemsPerPage.Value < pState.TotalNumberOfItemsInDB
             then pState
@@ -39,7 +43,7 @@ module PaginatorScope =
             failwith "Incorect number of items per page"
 
     let private IsValidPagesToSkip pState = 
-        if uint32 pState.ItemsPerPage.Value < pState.TotalNumberOfItemsInDB
+        if pState.PagesToSkip.Value < pState.PagesToSkipMax.Value
             then pState
         else
             failwith "Incorect number of pages to skip"
@@ -48,6 +52,8 @@ module PaginatorScope =
          pState
          |> IsValidItemsPerPage  
          |> GetNumberOfPages  
+         |> GetPagesToSkipMax  
+         |> IsValidPagesToSkip  
          |> IsValidLeft  
          |> IsValidLeftMore  
          |> IsValidRight  
@@ -60,10 +66,11 @@ module PaginatorScope =
              pPagesToSkipList
              pTotalNumberOfItemsInDB =
 
-         NextState   {NumberOfPages  = IntMore0Less65535Exclsv(1)
+         NextState   {NumberOfPages  = IntMore0Less65535Exclsv 1
                       CurrentPage    = pCurrentPage
                       ItemsPerPage   = pItemsPerPageList
                       PagesToSkip    = pPagesToSkipList
+                      PagesToSkipMax = IntMore0Less65535Exclsv 1
 
                       TotalNumberOfItemsInDB = pTotalNumberOfItemsInDB
                       LeftIndexInclsv  = 0u

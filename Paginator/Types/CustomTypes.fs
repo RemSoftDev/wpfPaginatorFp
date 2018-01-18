@@ -11,12 +11,14 @@ module Paginator.Types.CustomTypes
             IntMore0Less65535Exclsv(uint16 source)
         
         new(pValue) = IntMore0Less65535Exclsv(uint16 pValue)
+        new(pValue: uint32) = IntMore0Less65535Exclsv( uint16 pValue)
 
     type PaginatorState = 
-         {NumberOfPages : IntMore0Less65535Exclsv
-          CurrentPage   : IntMore0Less65535Exclsv
-          ItemsPerPage  : IntMore0Less65535Exclsv
-          PagesToSkip   : IntMore0Less65535Exclsv
+         {NumberOfPages  : IntMore0Less65535Exclsv
+          CurrentPage    : IntMore0Less65535Exclsv
+          ItemsPerPage   : IntMore0Less65535Exclsv
+          PagesToSkip    : IntMore0Less65535Exclsv
+          PagesToSkipMax : IntMore0Less65535Exclsv
 
           TotalNumberOfItemsInDB : uint32
           LeftIndexInclsv        : uint32

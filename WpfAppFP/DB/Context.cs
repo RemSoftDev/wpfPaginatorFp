@@ -13,10 +13,10 @@ namespace WpfAppFP.DB
             return DbData.Where(z => z >= startIndexInclsv && z <= endIndexInclsv);
         }
 
-        public static int GetTotalNumberOfItemsInDB(
+        public static uint GetTotalNumberOfItemsInDB(
             IEnumerable<int> DbData)
         {
-            return DbData.Count();
+            return (uint)DbData.Count();
         }
     }
 }

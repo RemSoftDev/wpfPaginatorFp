@@ -7,7 +7,7 @@ open Paginator.Types
 [<EntryPoint>]
 let main argv =
     printfn "Hello World from F#!"
-    let sdf = Init (IntMore0Less65535Exclsv 1)  (IntMore0Less65535Exclsv 10) (IntMore0Less65535Exclsv 2) 100
+    let sdf = Init (IntMore0Less65535Exclsv 1)  (IntMore0Less65535Exclsv 10) (IntMore0Less65535Exclsv 2) 100u
     let sdfa = sdf|>GoRight
 
     let rangeTest testValue mid size =
