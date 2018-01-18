@@ -21,12 +21,12 @@ namespace WpfAppFP
         private PaginatorState PaginatorCurrentState;
 
         // Initialisations
-        private void DisableElements(PaginatorState pPaginatorState)
+        private void DisableElements(PaginatorState pState)
         {
-            DisableLeft(pPaginatorState.IsValidLeft);
-            DisableLeftMore(pPaginatorState.IsValidLeftMore);
-            DisableRight(pPaginatorState.IsValidRight);
-            DisableRightMore(pPaginatorState.IsValidRightMore);
+            DisableLeft(pState.IsValidLeft);
+            DisableLeftMore(pState.IsValidLeftMore);
+            DisableRight(pState.IsValidRight);
+            DisableRightMore(pState.IsValidRightMore);
         }
 
         private void DisableLeft(bool pIsEnabled)
@@ -142,11 +142,11 @@ namespace WpfAppFP
         }
 
         // Update UI
-        private void RenderPaginator(PaginatorState pPaginatorState)
+        private void RenderPaginator(PaginatorState pState)
         {
-            DisableElements(pPaginatorState);
-            UpdateUI_SetDataToShow(Context.GetDataStartEndIndex(pPaginatorState.LeftIndexInclsv, pPaginatorState.RightIndexInclsv, DbData));
-            UpdateUI_CurrentPageIs(pPaginatorState.CurrentPage);
+            DisableElements(pState);
+            UpdateUI_SetDataToShow(Context.GetDataStartEndIndex(pState.LeftIndexInclsv, pState.RightIndexInclsv, DbData));
+            UpdateUI_CurrentPageIs(pState.CurrentPage);
         }
 
         private void UpdateUI_CurrentPageIs(IntMore0Less65535Exclsv pCurrentPage)

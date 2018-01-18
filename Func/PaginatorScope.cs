@@ -39,42 +39,42 @@ namespace Func
 
         public static PaginatorState
             GoRight(
-            this PaginatorState paginatorState)
+            this PaginatorState pState)
         {
-            return NextState(paginatorState.With(z => z.CurrentPage.Value++));
+            return NextState(pState.With(z => z.CurrentPage.Value++));
         }
 
         public static PaginatorState
             GoLeft(
-            this PaginatorState paginatorState)
+            this PaginatorState pState)
         {
-            return NextState(paginatorState.With(z => z.CurrentPage.Value--));
+            return NextState(pState.With(z => z.CurrentPage.Value--));
         }
 
         public static PaginatorState
             GoRightMore(
-            this PaginatorState paginatorState)
+            this PaginatorState pState)
         {
-            return NextState(paginatorState.With(z => z.CurrentPage.Value += paginatorState.PagesToSkip.Value));
+            return NextState(pState.With(z => z.CurrentPage.Value += pState.PagesToSkip.Value));
         }
 
         public static PaginatorState
             GoLeftMore(
-            this PaginatorState paginatorState)
+            this PaginatorState pState)
         {
-            return NextState(paginatorState.With(z => z.CurrentPage.Value -= paginatorState.PagesToSkip.Value));
+            return NextState(pState.With(z => z.CurrentPage.Value -= pState.PagesToSkip.Value));
         }
 
         private static Func<PaginatorState, uint>
-            GetLeftIndex() => (paginatorState) =>
+            GetLeftIndex() => (pState) =>
                 {
-                    return (uint)((paginatorState.CurrentPage.Value - 1) * paginatorState.ItemsPerPage.Value);
+                    return (uint)((pState.CurrentPage.Value - 1) * pState.ItemsPerPage.Value);
                 };
 
         private static Func<PaginatorState, uint>
-            RightIndex => (paginatorState) =>
+            RightIndex => (pState) =>
                 {
-                    return (uint)(paginatorState.CurrentPage.Value * paginatorState.ItemsPerPage.Value);
+                    return (uint)(pState.CurrentPage.Value * pState.ItemsPerPage.Value);
                 };
 
         public static Func<uint, uint, IEnumerable<int>, IEnumerable<int>>
@@ -84,44 +84,44 @@ namespace Func
                 };
 
         private static Func<PaginatorState, PaginatorState>
-            GetNumberOfPages() => (paginatorState) =>
+            GetNumberOfPages() => (pState) =>
                 {
-                    var res = (ushort)Math.Round((double)paginatorState.TotalNumberOfItemsInDB / paginatorState.ItemsPerPage.Value, 0, MidpointRounding.AwayFromZero);
-                    return paginatorState.With(z => z.NumberOfPages = new IntMore0Less65535Exclsv() { Value = res });
+                    var res = (ushort)Math.Round((double)pState.TotalNumberOfItemsInDB / pState.ItemsPerPage.Value, 0, MidpointRounding.AwayFromZero);
+                    return pState.With(z => z.NumberOfPages = new IntMore0Less65535Exclsv() { Value = res });
                 };
 
         private static Func<PaginatorState, PaginatorState>
-            IsValidLeft() => (paginatorState) =>
+            IsValidLeft() => (pState) =>
                 {
-                    return paginatorState.With(z => z.IsValidLeft = paginatorState.CurrentPage.Value > 1);
+                    return pState.With(z => z.IsValidLeft = pState.CurrentPage.Value > 1);
                 };
 
         private static Func<PaginatorState, PaginatorState>
-            IsValidLeftMore() => (paginatorState) =>
+            IsValidLeftMore() => (pState) =>
                  {
-                     return paginatorState.With(z => z.IsValidLeftMore = paginatorState.CurrentPage.Value - paginatorState.PagesToSkip.Value > 0);
+                     return pState.With(z => z.IsValidLeftMore = pState.CurrentPage.Value - pState.PagesToSkip.Value > 0);
                  };
 
         private static Func<PaginatorState, PaginatorState>
-             IsValidRight() => (paginatorState) =>
+             IsValidRight() => (pState) =>
                  {
-                     return paginatorState.With(z => z.IsValidRight = paginatorState.CurrentPage.Value < paginatorState.NumberOfPages.Value);
+                     return pState.With(z => z.IsValidRight = pState.CurrentPage.Value < pState.NumberOfPages.Value);
                  };
 
         private static Func<PaginatorState, PaginatorState>
-             IsValidRightMore() => (paginatorState) =>
+             IsValidRightMore() => (pState) =>
                  {
-                     return paginatorState.With(z => z.IsValidRightMore = paginatorState.CurrentPage.Value + paginatorState.PagesToSkip.Value < paginatorState.NumberOfPages.Value);
+                     return pState.With(z => z.IsValidRightMore = pState.CurrentPage.Value + pState.PagesToSkip.Value < pState.NumberOfPages.Value);
                  };
 
         private static Func<PaginatorState, bool>
-           IsValidItemsPerPage() => (paginatorState) =>
+           IsValidItemsPerPage() => (pState) =>
                  {
                      return false;
                  };
 
         private static Func<PaginatorState, bool>
-            IsValidPagesToSkip() => (paginatorState) =>
+            IsValidPagesToSkip() => (pState) =>
                  {
                      return false;
                  };
